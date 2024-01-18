@@ -102,3 +102,57 @@ form{
     display: block;
     margin-top: 0em;
 }
+h1{
+    color: white;
+}
+h1{
+    color: white;
+    font-size: 20px;
+    margin: 25px 35px;
+}
+h2{
+    color: white;
+    font-size: 16px;
+    font-family: arial,sans-serif;
+}
+.line{
+    border-bottom: 1px solid
+}
+.a_search_box{
+    padding: 34px;
+}
+.text{
+    color: white;
+    font-family: arial,sans-serif;
+    line-height: 16px;
+}
+.text_dark{
+    color: #303134;
+    font-family: arial,sans-serif;
+    line-height: 16px;
+}
+#as_row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.asr_label{
+    width: 200px;
+}
+.as_input{
+    width: 400px;
+    height: 20px;
+}
+.as_button_box{
+    width: 400px;
+    padding: 6px;
+}
+.as_button{
+float: right;
+box-shadow: none;
+background-color: #4d90fe;
+border: #3079ed;
+height: 30px;
+padding: 8px;
+cursor: pointer;
+}
