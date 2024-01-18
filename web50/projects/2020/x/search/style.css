@@ -10,21 +10,95 @@ body {
     align-items: center;
 }
 #nav_button_box{
-    background-color: #202124;
+    display: block;
+}
+.nav_button{
+    padding-inline: 6px;
+    color: white;
+    display: inline-block;
+    line-height: 24px;
+    vertical-align: middle;
+    text-decoration: none;
+    cursor: pointer;
+    font-family: arial,sans-serif;
+}
+#mainWindow{
+    height: 75vh;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    width: 200px;
-    padding: 6px;
-    margin: 10px;
-}
-#logoBox{
-    display: flex;
     justify-content: center;
-    margin-top: 200px;
 }
-#inputBox{
+#logo {
     display: flex;
-    justify-content: center;
-    padding-top: 30px;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    padding-top: 15vh; 
+}
+.mainBlock{
+    padding: 20px;
+    max-height: 160px;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    display: block;
+}
+.searchBar{
+    display: flex;
+    position: relative;
+    min-height: 44px;
+    background: #202124;
+    border: 1px solid #5f6368;
+    box-shadow: none;
+    border-radius: 24px;
+    margin: 0 auto;
+    width: 638px;
+    width: auto;
+    max-width: 584px;
+}
+.entryField{
+    font-family: arial,sans-serif;
+    line-height: 22px;
+    margin-bottom: 8px;
+    overflow-x: hidden;
+    outline: none;
+    display: flex;
+    -webkit-tap-highlight-color: transparent;
+    resize: none;
+    background-color: transparent;
+    border: none;
+    margin: 0;
+    padding: 10px;
+    color: #e8eaed;
+    word-wrap: break-word;
+    outline: none;
+    display: flex;
+    -webkit-tap-highlight-color: transparent;
+    font-size: 16px;
+    flex: 100%;
+}
+.buttonBlock{
+    height: 70px;
+    padding-top: 18px;
+}
+.button{
+    background-color: #303134;
+    border: 1px solid #303134;
+    border-radius: 4px;
+    color: #e8eaed;
+    font-family: arial,sans-serif;
+    font-size: 14px;
+    margin: 11px 4px;
+    padding: 0 16px;
+    line-height: 27px;
+    height: 36px;
+    min-width: 54px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+}
+form{
+    display: block;
+    margin-top: 0em;
 }
