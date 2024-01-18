@@ -1,0 +1,30 @@
+body {
+    background-color: #202124;
+    margin: 0;
+}
+#navbar {
+    background-color: #202124;
+    height: 60px;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+}
+#nav_button_box{
+    background-color: #202124;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 200px;
+    padding: 6px;
+    margin: 10px;
+}
+#logoBox{
+    display: flex;
+    justify-content: center;
+    margin-top: 200px;
+}
+#inputBox{
+    display: flex;
+    justify-content: center;
+    padding-top: 30px;
+}

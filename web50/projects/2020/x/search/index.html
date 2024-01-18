@@ -1,25 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <title>Search</title>
-    <style>
-        form {
-            display: inline-block;
-        }
-    </style>
-</head>
-<body>
-    <div>
-        <form action="image_search.html">
-            <input type="submit" value="Image Search" />
+    <head>
+        <title>Search</title>
+        <style>
+            body {
+                background-color: #202124;
+                margin: 0;
+            }
+            #navbar {
+                background-color: #202124;
+                height: 60px;
+                display: flex;
+                justify-content: right;
+                align-items: center;
+            }
+            #nav_button_box{
+                background-color: #202124;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 200px;
+                padding: 6px;
+                margin: 10px;
+            }
+            #logoBox{
+                display: flex;
+                justify-content: center;
+                margin-top: 200px;
+            }
+            #inputBox{
+                display: flex;
+                justify-content: center;
+                padding-top: 30px;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div id="navbar">
+            <div id="nav_button_box">
+                <a href="image_search.html">Image Search</a>
+                <a href="advanced_search.html">Advanced Search</a>
+            </div>
+        </div>
+        <div id="logoBox">
+            <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png" alt="Logo">
+        </div>
+        <div id="inputBox">
+        <form action="https://www.google.com/search">
+            <input type="text" name="q">
+            <input type="submit" value="Google Search">
         </form>
-        <form action="advanced_search.html">
-            <input type="submit" value="Advanced Search" />
-        </form>
-    </div>
-    <form action="https://google.com/search">
-        <input type="text" name="q">
-        <input type="submit" value="Google Search">
-    </form>
-</body>
+        </div>
+    </body>
 </html>
