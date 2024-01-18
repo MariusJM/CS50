@@ -8,3 +8,9 @@ def index(request):
 
 def marius(request):
     return HttpResponse("Hello, Marius!")
+
+def david(request):
+    return HttpResponse("Hello, David!")
+
+def greet(request, name):
+    return HttpResponse(f"Hello, {name.capitalize()}!")
