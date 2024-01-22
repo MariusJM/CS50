@@ -38,3 +38,11 @@ def search(request):
                 "title": query,
                 "content": markdown_to_html(query)
             })
+        else:
+            found = []
+            for item in util.list_entries():
+                if query.lower() in item.lower():
+                    found.append(item)
+            return render(request, "encyclopedia/index.html", {
+                "entries": found
+            })
