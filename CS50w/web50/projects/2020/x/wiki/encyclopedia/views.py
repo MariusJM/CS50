@@ -43,6 +43,6 @@ def search(request):
             for item in util.list_entries():
                 if query.lower() in item.lower():
                     found.append(item)
-            return render(request, "encyclopedia/index.html", {
+            return render(request, "encyclopedia/search_results.html", {
                 "entries": found
             })
