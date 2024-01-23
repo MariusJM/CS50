@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from . import util
-import markdown
+from markdown2 import Markdown
 import random
 
 
@@ -11,7 +11,7 @@ def index(request):
 
 
 def markdown_to_html(title):
-    markdowner = markdown.Markdown()
+    markdowner = Markdown()
     if util.get_entry(title) == None:
         return None
     else:
@@ -22,7 +22,7 @@ def entry(request, title):
     content = markdown_to_html(title)
     if content == None:
         return render(request, "encyclopedia/entry_not_found.html", {
-            "message": "Requested page was not found"
+            "message": f"Requested page '{title}' was not found"
         })
     else:
         return render(request, "encyclopedia/entry.html", {
@@ -40,14 +40,19 @@ def search(request):
                 "content": markdown_to_html(query)
             })
         else:
-            found = []
+            entries_found = []
             for item in util.list_entries():
                 if query.lower() in item.lower():
-                    found.append(item)
-            return render(request, "encyclopedia/search_results.html", {
-                "entries": found
-            })
-        
+                    entries_found.append(item)
+            if len(entries_found) == 0:
+                return render(request, "encyclopedia/entry_not_found.html", {
+                    "message": f"No entries with name '{query}'"
+                })
+            else:
+                return render(request, "encyclopedia/search_results.html", {
+                    "entries": entries_found
+                })
+
 
 def add(request):
     if request.method == "GET":
@@ -70,10 +75,9 @@ def add(request):
 def edit(request):
     if request.method == "POST":
         title = request.POST.get("entry_title")
-        content = util.get_entry(title)
         return render(request, "encyclopedia/edit.html", {
             "title": title,
-            "content": content
+            "content": util.get_entry(title)
         })
     
 
@@ -86,6 +90,8 @@ def save(request):
             "title": title,
             "content": markdown_to_html(title)
         })
+    
+
 def random_page(request):
     title = random.choice(util.list_entries())
     return render(request, "encyclopedia/entry.html",{
