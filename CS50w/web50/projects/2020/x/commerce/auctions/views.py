@@ -63,6 +63,15 @@ def register(request):
         return render(request, "auctions/register.html")
 
 def create_listing(request):
+    if request.method== "POST":
+        user = request.user
+        category = request.POST["category"]
+        title = request.POST["title"]
+        image = request.POST["image"]
+        starting_bid = request.POST["starting_bid"]
+        description = request.POST["description"]
+        is_active = request.POST["is_active"]
+
     return render(request, "auctions/create_listing.html")
 
 def watchlist(request):
