@@ -62,7 +62,7 @@ def add(request):
         content = request.POST.get("content")
         if util.get_entry(title) is not None:
             return render(request, "encyclopedia/entry_not_found.html", {
-                "message": f"{title} allready exist"
+                "message": f"Entry with name {title} allready exist"
             })
         else:
             util.save_entry(title,content)
