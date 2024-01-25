@@ -4,12 +4,17 @@
     <h2>Create Listing</h2>
 
     <form action="{% url 'create_listing' %}" method="POST">
+
         {% csrf_token %}
-        <div>
+
+        <div class="form-group">
             <label for="category">Category</label>
-            <input type="text" name="category" placeholder="Category" id="Category">
+            <select name="category" id="category">
+                {% for category in categories %}
+                <option value="Select Category"> {{ category }}</option>
+                {% endfor %}
         </div>
-        <div>
+
         <div>
             <label for="title">Title</label>
             <input type="text" name="title" placeholder="Enter Title" id="title">

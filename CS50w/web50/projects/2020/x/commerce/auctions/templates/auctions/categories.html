@@ -3,5 +3,11 @@
 {% block body %}
     <h2>Categories</h2>
 
-    TODO
+    <div class="form-group">
+        <label for="category">Category</label>
+
+            {% for category in categories %}
+            <option value="Select Category"> {{ category }}</option>
+            {% endfor %}
+    </div>
 {% endblock %}
