@@ -1,0 +1,22 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    
+
+        
+    <div class="container">
+        <h1>{{ listing_item.title }}</h1>
+        <h6>Listing ID.- {{ listing_item.id }}. Seller - {{ listing_item.seller }}</h6>
+        <img src="{{ listing_item.image }}" class="img-fluid" alt="{{ listing_item.title }}">
+        <p>Starting bid is {{ listing_item.starting_bid }}€</p>
+        <p>Description: {{ listing_item.description }}</p>
+        <a href="" class="btn btn-dark">Add To Watchlist</a>
+        <div class="container my-3">
+            <textarea name="Comment" id="comment" cols="30" rows="5"></textarea>
+            <br>
+            <a href="" class="btn btn-dark">Add Comment</a>
+        </div>
+    </div>
+
+    <a href="{{ referring_url }}" class="btn btn-dark">Go Back</a>
+{% endblock %}

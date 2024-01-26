@@ -97,3 +97,10 @@ def category(request, category_id):
     return render(request, "auctions/category.html", {
         "category_listings": category_listings
     })
+
+def listing_item(request, item_id):
+    referring_url = request.META.get('HTTP_REFERER', '/')
+    return render(request, "auctions/listing_item.html",{
+        "listing_item": Listing.objects.get(pk=item_id),
+        "referring_url": referring_url,
+    })
