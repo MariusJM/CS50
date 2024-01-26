@@ -68,23 +68,14 @@ def create_listing(request):
             "categories": Category.objects.values_list('category_name', flat=True)
         })
     else:
-        # request.method== "POST":
-        user = request.user
-        category = request.POST["category"]
-        category_d = Category.objects.get(category_name=category)
-        title = request.POST["title"]
-        image = request.POST["image"]
-        starting_bid = request.POST["starting_bid"]
-        description = request.POST["description"]
-        is_active = request.POST["is_active"]
         add_listing = Listing(
-            seller = user,
-            category = category_d,
-            title = title,
-            image = image,
-            starting_bid = int(starting_bid),
-            description = description,
-            isActive = bool(is_active)
+            seller = request.user,
+            category = Category.objects.get(category_name=request.POST["category"]),
+            title = request.POST["title"],
+            image = request.POST["image"],
+            starting_bid = int(request.POST["starting_bid"]),
+            description = request.POST["description"],
+            isActive = bool(request.POST.get("is_active", False))
         )
         add_listing.save()
         return HttpResponseRedirect(reverse(index))
