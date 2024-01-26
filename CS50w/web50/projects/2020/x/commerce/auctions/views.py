@@ -103,4 +103,11 @@ def listing_item(request, item_id):
     return render(request, "auctions/listing_item.html",{
         "listing_item": Listing.objects.get(pk=item_id),
         "referring_url": referring_url,
+        "on_watchlist": False
     })
+
+def off_watchlist(request, item_id):
+    return
+
+def on_watchlist(request, item_id):
+    return

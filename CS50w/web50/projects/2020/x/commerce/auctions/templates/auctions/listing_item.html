@@ -10,12 +10,29 @@
         <img src="{{ listing_item.image }}" class="img-fluid" alt="{{ listing_item.title }}">
         <p>Starting bid is {{ listing_item.starting_bid }}€</p>
         <p>Description: {{ listing_item.description }}</p>
-        <a href="" class="btn btn-dark">Add To Watchlist</a>
-        <div class="container my-3">
-            <textarea name="Comment" id="comment" cols="30" rows="5"></textarea>
-            <br>
-            <a href="" class="btn btn-dark">Add Comment</a>
+        <div>
+            {% if user.is_authenticated %}
+                {% if on_watchlist %}
+                    <form action="{% url 'off_watchlist' item_id=listing_item.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-dark">Remove From Watchlist</button>
+                    </form>
+                {% else %}
+                <form action="{% url 'on_watchlist' item_id=listing_item.id %}" method="post">
+                    {% csrf_token %}
+                    <a type="submit" class="btn btn-dark">Add To Watchlist</a>
+                </form>
+                {% endif %}
+            <div class="container my-3">
+                <textarea name="comment" id="comment" cols="30" rows="5"></textarea>
+                <br>
+                <a href="" class="btn btn-dark">Add Comment</a>
+            </div>
+
+            {% endif %}
         </div>
+        
+
     </div>
 
     <a href="{{ referring_url }}" class="btn btn-dark">Go Back</a>

@@ -22,6 +22,7 @@ class Listing(models.Model):
     starting_bid = models.IntegerField(default=5, validators=[MinValueValidator(5)])
     description = models.TextField(null=True, blank=False)
     isActive = models.BooleanField(default=True)
+    watchlist = models.ManyToManyField(User, null=True, blank=True, related_name="watchlist")
 
     def __str__(self):
         return f"Item Nr. {self.id} - {self.title}"
