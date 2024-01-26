@@ -11,21 +11,22 @@
             <label for="category">Category</label>
             <select name="category" id="category">
                 {% for category in categories %}
-                <option value="Select Category"> {{ category }}</option>
+                <option value="{{ category }}"> {{ category }}</option>
                 {% endfor %}
+            </select>
         </div>
-
         <div>
             <label for="title">Title</label>
             <input type="text" name="title" placeholder="Enter Title" id="title">
         </div>
+        
         <div>
             <label for="image">Image URL</label>
             <input type="text" name="image" placeholder="Image URL address" id="image">
         </div>
         <div>
             <label for="starting_bid">Starting Bid</label>
-            <input type="text" name="starting_bid" placeholder="Starting Bid" id="starting_bid">
+            <input type="number" name="starting_bid" placeholder="Starting Bid" id="starting_bid">
         </div>
         <div>
             <label for="description">Description</label>
@@ -33,7 +34,7 @@
         </div>
         <div>
             <label for="is_active">Is Active</label>
-            <input type="text" name="is_active" placeholder="Is Active" id="is_active">
+            <input type="checkbox" name="is_active" placeholder="Is Active" id="is_active">
         </div>
         <button type="submit" class="btn btn-dark">Create New Listing</button>
     </form>
