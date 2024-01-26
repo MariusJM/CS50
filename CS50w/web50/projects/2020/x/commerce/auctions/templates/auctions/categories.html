@@ -3,11 +3,9 @@
 {% block body %}
     <h2>Categories</h2>
 
-    <div class="form-group">
-        <label for="category">Category</label>
-
-            {% for category in categories %}
-            <option value="Select Category"> {{ category }}</option>
-            {% endfor %}
-    </div>
+    <ul>
+        {% for category in categories %}
+            <li><a href="{% url 'category' category.id %}">{{ category.category_name }}</a></li>
+        {% endfor %}
+    </ul>
 {% endblock %}

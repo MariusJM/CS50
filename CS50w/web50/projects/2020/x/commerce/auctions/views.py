@@ -8,7 +8,9 @@ from .models import User, Category, Listing
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    return render(request, "auctions/index.html",{
+        "listings":Listing.objects.filter(isActive=True)
+    })
 
 
 def login_view(request):
@@ -87,4 +89,11 @@ def watchlist(request):
 def categories(request):
     return render(request, "auctions/categories.html",{
         "categories": Category.objects.all()
+    })
+
+def category(request, category_id):
+    category = Category.objects.get(pk=category_id)
+    category_listings = Listing.objects.filter(category=category)
+    return render(request, "auctions/category.html", {
+        "category_listings": category_listings
     })

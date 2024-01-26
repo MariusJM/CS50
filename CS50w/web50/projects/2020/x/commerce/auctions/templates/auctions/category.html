@@ -1,0 +1,25 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>{{ category.category_name }} Listings</h2>
+
+    {% if category_listings %}
+        <ul>
+            <div class="row mx-3">
+            {% for item in category_listings %}
+                <div class="card mx-1" style="width: 18rem;">
+                    <img src="{{ item.image }}" class="card-img-top" alt="{{ item.title }}">
+                    <div class="card-body">
+                    <h5 class="card-title">{{ item.title }}</h5>
+                    <p class="card-text">{{ item.description }}</p>
+                    <a href="#" class="btn btn-primary">See Details</a>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </ul>
+    {% else %}
+        <p>No listings found for this category.</p>
+    {% endif %}
+    <a href="{% url 'categories' %}">Back to Categories</a>
+{% endblock %}

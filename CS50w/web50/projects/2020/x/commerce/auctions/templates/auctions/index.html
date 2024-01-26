@@ -2,6 +2,16 @@
 
 {% block body %}
     <h2>Active Listings</h2>
-
-    TODO
+    <div class="row mx-3">
+    {% for item in listings %}
+        <div class="card mx-1" style="width: 18rem;">
+            <img src="{{ item.image }}" class="card-img-top" alt="{{ item.title }}">
+            <div class="card-body">
+            <h5 class="card-title">{{ item.title }}</h5>
+            <p class="card-text">{{ item.description }}</p>
+            <a href="#" class="btn btn-primary">See Details</a>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
 {% endblock %}
