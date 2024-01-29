@@ -100,14 +100,23 @@ def category(request, category_id):
 
 def listing_item(request, item_id):
     referring_url = request.META.get('HTTP_REFERER', '/')
+    listing_data = Listing.objects.get(pk=item_id)
+    if request.user in listing_data.watchlist.all():
+        on_watchlist = True
+    else:
+        on_watchlist = False
     return render(request, "auctions/listing_item.html",{
         "listing_item": Listing.objects.get(pk=item_id),
         "referring_url": referring_url,
-        "on_watchlist": False
+        "on_watchlist": on_watchlist
     })
 
 def off_watchlist(request, item_id):
-    return
+    listing_data = Listing.objects.get(pk=item_id)
+    listing_data.watchlist.remove(request.user)
+    return HttpResponseRedirect(reverse("listing_item", args=(item_id, )))
 
 def on_watchlist(request, item_id):
-    return
+    listing_data = Listing.objects.get(pk=item_id)
+    listing_data.watchlist.add(request.user)
+    return HttpResponseRedirect(reverse("listing_item", args=(item_id, )))

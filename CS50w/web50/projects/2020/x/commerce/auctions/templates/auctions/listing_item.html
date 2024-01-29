@@ -20,7 +20,7 @@
                 {% else %}
                 <form action="{% url 'on_watchlist' item_id=listing_item.id %}" method="post">
                     {% csrf_token %}
-                    <a type="submit" class="btn btn-dark">Add To Watchlist</a>
+                    <button type="submit" class="btn btn-dark">Add To Watchlist</button>
                 </form>
                 {% endif %}
             <div class="container my-3">
