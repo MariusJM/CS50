@@ -1,25 +1,59 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>{{ category.category_name }} Listings</h2>
+    <style>
+        .card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            margin-right: 10px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
 
-    {% if category_listings %}
-        <ul>
+        .card-img-top {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .card-body {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+
+        .btn-see-details {
+            width: 100%;
+        }
+    </style>
+
+    <div class="container">
+        <h2>{{ category.category_name }} Listings</h2>
+        {% if category_listings %}
             <div class="row mx-3">
-            {% for item in category_listings %}
-                <div class="card mx-1" style="width: 18rem;">
-                    <img src="{{ item.image }}" class="card-img-top m-3" alt="{{ item.title }}">
-                    <div class="card-body">
-                    <h5 class="card-title text-center ">{{ item.title }}</h5>
-                    <p class="card-text text-center">{{ item.description }}</p>
-                    <a href="{% url 'listing_item' item.id%}" class="btn btn-dark mx-3 btn-sm" >See Details</a>
+                {% for item in category_listings %}
+                    <div class="card mx-1" style="width: 20rem;">
+                        <img src="{{ item.image }}" class="card-img-top" alt="{{ item.title }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.title }}</h5>
+                            <p class="card-text">{{ item.description }}</p>
+                            <a href="{% url 'listing_item' item.id%}" class="btn btn-dark mx-3 btn-sm btn-see-details">See Details</a>
+                        </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
             </div>
-        </ul>
-    {% else %}
-        <p>No listings found for this category.</p>
-    {% endif %}
-    <a href="{% url 'categories' %}" class="btn btn-dark">Back to Categories</a>
+        {% else %}
+            <p>No listings found for this category.</p>
+        {% endif %}
+        <a href="{% url 'categories' %}" class="btn btn-dark mt-3">Back to Categories</a>
+    </div>
 {% endblock %}

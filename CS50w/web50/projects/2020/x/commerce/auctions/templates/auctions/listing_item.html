@@ -1,42 +1,57 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <div class="container">
-        <h1>{{ listing_item.title }}</h1>
-        <h6>Listing ID - {{ listing_item.id }}. Seller - {{ listing_item.seller }}</h6>
-        <img src="{{ listing_item.image }}" class="img-fluid" alt="{{ listing_item.title }}">
-        <p>Starting bid is {{ listing_item.starting_bid }}€</p>
-        <p>Description: {{ listing_item.description }}</p>
-        <div>
-            {% if user.is_authenticated %}
-                {% if on_watchlist %}
-                    <form action="{% url 'off_watchlist' item_id=listing_item.id %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-dark">Remove From Watchlist</button>
-                    </form>
-                {% else %}
-                <form action="{% url 'on_watchlist' item_id=listing_item.id %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-dark">Add To Watchlist</button>
-                </form>
-                {% endif %}
-
-            <div class="container my-3">
-                <form action="{% url 'add_comment' id=listing_item.id %}" method="post">
-                    {% csrf_token %}
-                    <input type="text" name="add_comment" placeholder="Write your comment here">
-                    <br>
-                    <button type="submit" class="btn btn-dark">Add Comment</button> 
-                </form>
+    <div class="container border p-3">
+        <div class="row">
+            <div class="col-md-8">
+                <!-- Left side content -->
+                <img src="{{ listing_item.image }}" class="img-fluid" alt="{{ listing_item.title }}">
             </div>
-            {% endif %}
-            <ul>
-                {% for comment in comments %}
-                    <li class="list-group-item"><strong> {{ comment.commenter }} Commented: </strong> {{ comment.comment }}</li>
-                {% endfor %}
-            </ul>
-            
+            <div class="col-md-4">
+                <!-- Right side content -->
+                <h1>{{ listing_item.title }}</h1>
+                <p>Listing ID - {{ listing_item.id }}</p>
+                <p>Description: {{ listing_item.description }}</p>
+                <p>Starting bid is {{ listing_item.starting_bid }}€</p>
+                
+                {% if user.is_authenticated %}
+                    {% if on_watchlist %}
+                        <form action="{% url 'off_watchlist' item_id=listing_item.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-dark">Remove From Watchlist</button>
+                        </form>
+                    {% else %}
+                        <form action="{% url 'on_watchlist' item_id=listing_item.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-dark">Add To Watchlist</button>
+                        </form>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Comments section (below both left and right sides) -->
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <ul class="list-group">
+                    {% for comment in comments %}
+                        <li class="list-group-item"><strong>{{ comment.commenter }} Commented: </strong> {{ comment.comment }}</li>
+                    {% endfor %}
+                </ul>
+        
+                {% if user.is_authenticated %}
+                    <div class="container my-3">
+                        <form action="{% url 'add_comment' id=listing_item.id %}" method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <input type="text" name="add_comment" placeholder="Write your comment here" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-dark btn-block">Add Comment</button>
+                        </form>
+                    </div>
+                {% endif %}
+            </div>
         </div>
     </div>
-    <a href="{{ referring_url }}" class="btn btn-dark">Go Back</a>
+    <a href="{{ referring_url }}" class="btn btn-dark mt-3">Go Back</a>
 {% endblock %}

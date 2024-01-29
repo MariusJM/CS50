@@ -13,14 +13,22 @@ class Category(models.Model):
     def __str__(self):
         return f"{self.id} {self.category_name}"
 
+class Bid(models.Model):
+    id = models.AutoField(primary_key=True)
+    bid = models.IntegerField(default=0)
+    bidder = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name="bidder")
+    
+    def __str__(self):
+        return str(self.bid)
+
 class Listing(models.Model):
     id = models.AutoField(primary_key=True)
     seller = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=64, null=True, blank=False)
     image = models.URLField(null=True, blank=True)
-    starting_bid = models.IntegerField(default=5, validators=[MinValueValidator(5)])
-    description = models.TextField(null=True, blank=False)
+    starting_bid = models.ForeignKey(Bid, on_delete=models.CASCADE, null=True, blank=True, related_name="bids")
+    description = models.TextField(null=True, blank=False, max_length=500)
     isActive = models.BooleanField(default=True)
     watchlist = models.ManyToManyField(User, null=True, blank=True, related_name="watchlist")
 
@@ -28,9 +36,7 @@ class Listing(models.Model):
         return f"Item Nr. {self.id} - {self.title}"
 
 
-class Bid(models.Model):
-    id = models.AutoField(primary_key=True)
-    pass
+
 
 class Comments(models.Model):
     id = models.AutoField(primary_key=True)
@@ -40,3 +46,5 @@ class Comments(models.Model):
     
     def __str__(self):
         return f"{self.commenter} comment on {self.listing}"
+    class Meta:
+        verbose_name = "Comment"

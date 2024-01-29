@@ -1,17 +1,46 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Active Listings</h2>
-    <div class="row mx-3">
-    {% for item in listings %}
-        <div class="card mx-1" style="width: 18rem;">
-            <img src="{{ item.image }}" class="card-img-top" alt="{{ item.title }}">
-            <div class="card-body">
-            <h5 class="card-title">{{ item.title }}</h5>
-            <p class="card-text">{{ item.description }}</p>
-            <a href="{% url 'listing_item' item.id%}" class="btn btn-dark mx-3 btn-sm" >See Details</a>
-            </div>
+    <style>
+        .card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 20rem; /* Set the width to your desired value */
+            margin-right: 10px; /* Adjust the horizontal margin between cards */
+            margin-top: 10px;
+        }
+
+        .card-body {
+            flex-grow: 1;
+        }
+
+        .card-text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3; /* Adjust the number of lines to your preference */
+            -webkit-box-orient: vertical;
+        }
+
+        .btn-see-details {
+            width: 90%;
+        }
+    </style>
+
+    <div class="container">
+        <h2>Active Listings</h2>
+        <div class="row mx-3">
+            {% for item in listings %}
+                <div class="card mx-1" style="overflow: hidden;">
+                    <img src="{{ item.image }}" class="card-img-top" alt="{{ item.title }}" style="height: 200px; width: 100%; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.title }}</h5>
+                        <p class="card-text">{{ item.description }}</p>
+                        <a href="{% url 'listing_item' item.id%}" class="btn btn-dark mx-3 btn-sm btn-see-details">See Details</a>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
-    {% endfor %}
     </div>
 {% endblock %}
