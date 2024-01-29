@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Category, Listing
+from .models import User, Category, Listing, Comments
 
 
 def index(request):
@@ -64,6 +64,7 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
+
 def create_listing(request):
     if request.method=="GET":
         return render(request, "auctions/create_listing.html",{
@@ -81,7 +82,20 @@ def create_listing(request):
         )
         add_listing.save()
         return HttpResponseRedirect(reverse(index))
-    
+
+
+def categories(request):
+    return render(request, "auctions/categories.html",{
+        "categories": Category.objects.all()
+    })
+
+
+def category(request, category_id):
+    category = Category.objects.get(pk=category_id)
+    category_listings = Listing.objects.filter(category=category)
+    return render(request, "auctions/category.html", {
+        "category_listings": category_listings
+    })
 
 def watchlist(request):
     current_user = request.user
@@ -90,17 +104,17 @@ def watchlist(request):
         "listings": watchlist_items
     })
 
-def categories(request):
-    return render(request, "auctions/categories.html",{
-        "categories": Category.objects.all()
-    })
 
-def category(request, category_id):
-    category = Category.objects.get(pk=category_id)
-    category_listings = Listing.objects.filter(category=category)
-    return render(request, "auctions/category.html", {
-        "category_listings": category_listings
-    })
+def off_watchlist(request, item_id):
+    listing_data = Listing.objects.get(pk=item_id)
+    listing_data.watchlist.remove(request.user)
+    return HttpResponseRedirect(reverse("watchlist"))
+
+
+def on_watchlist(request, item_id):
+    listing_data = Listing.objects.get(pk=item_id)
+    listing_data.watchlist.add(request.user)
+    return HttpResponseRedirect(reverse("watchlist"))
 
 def listing_item(request, item_id):
     referring_url = request.META.get('HTTP_REFERER', '/')
@@ -112,15 +126,18 @@ def listing_item(request, item_id):
     return render(request, "auctions/listing_item.html",{
         "listing_item": listing_items,
         "referring_url": referring_url,
-        "on_watchlist": on_watchlist
+        "on_watchlist": on_watchlist,
+        "comments": Comments.objects.filter(listing=Listing.objects.get(pk=item_id))
     })
 
-def off_watchlist(request, item_id):
-    listing_data = Listing.objects.get(pk=item_id)
-    listing_data.watchlist.remove(request.user)
-    return HttpResponseRedirect(reverse("watchlist"))
 
-def on_watchlist(request, item_id):
-    listing_data = Listing.objects.get(pk=item_id)
-    listing_data.watchlist.add(request.user)
-    return HttpResponseRedirect(reverse("watchlist"))
+def add_comment(request, id):
+    message = request.POST['add_comment']
+
+    add_comment = Comments(
+        commenter = request.user,
+        listing = Listing.objects.get(pk=id),
+        comment = request.POST['add_comment']
+    )
+    add_comment.save()
+    return HttpResponseRedirect(reverse("listing_item", args=(id, )))

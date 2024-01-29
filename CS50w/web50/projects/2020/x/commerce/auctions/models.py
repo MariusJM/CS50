@@ -34,5 +34,9 @@ class Bid(models.Model):
 
 class Comments(models.Model):
     id = models.AutoField(primary_key=True)
+    commenter = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name="user_comment")
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, null=True, blank=True, related_name = "listing_comment")
     comment = models.TextField(null=True, blank=True)
-    pass
+    
+    def __str__(self):
+        return f"{self.commenter} comment on {self.listing}"

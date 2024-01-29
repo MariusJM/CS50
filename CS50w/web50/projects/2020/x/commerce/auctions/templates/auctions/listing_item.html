@@ -20,13 +20,22 @@
                     <button type="submit" class="btn btn-dark">Add To Watchlist</button>
                 </form>
                 {% endif %}
-            <div class="container my-3">
-                <textarea name="comment" id="comment" cols="30" rows="5"></textarea>
-                <br>
-                <a href="" class="btn btn-dark">Add Comment</a>
-            </div>
 
+            <div class="container my-3">
+                <form action="{% url 'add_comment' id=listing_item.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="text" name="add_comment" placeholder="Write your comment here">
+                    <br>
+                    <button type="submit" class="btn btn-dark">Add Comment</button> 
+                </form>
+            </div>
             {% endif %}
+            <ul>
+                {% for comment in comments %}
+                    <li class="list-group-item"><strong> {{ comment.commenter }} Commented: </strong> {{ comment.comment }}</li>
+                {% endfor %}
+            </ul>
+            
         </div>
     </div>
     <a href="{{ referring_url }}" class="btn btn-dark">Go Back</a>
