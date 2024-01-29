@@ -84,7 +84,11 @@ def create_listing(request):
     
 
 def watchlist(request):
-    return render(request, "auctions/watchlist.html")
+    current_user = request.user
+    watchlist_items = current_user.watchlist.all()
+    return render(request, "auctions/watchlist.html",{
+        "listings": watchlist_items
+    })
 
 def categories(request):
     return render(request, "auctions/categories.html",{
