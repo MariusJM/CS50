@@ -3,8 +3,10 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.db.models import Max
 
-from .models import User, Category, Listing, Comments#, Bid 
+
+from .models import User, Category, Listing, Comments, Bid
 
 
 def index(request):
@@ -73,15 +75,12 @@ def create_listing(request):
             "categories": Category.objects.values_list('category_name', flat=True)
         })
     else:
-        bid = Bid.objects.create(bid=0, bidder=request.user)
-        bid.save()
         add_listing = Listing(
             seller = request.user,
             category = Category.objects.get(category_name=request.POST["category"]),
             title = request.POST["title"],
             image = request.POST["image"],
             starting_bid = float(request.POST["starting_bid"]),
-            highest_bid = bid,
             description = request.POST["description"],
             isActive = bool(request.POST.get("is_active", False))
         )
@@ -124,40 +123,21 @@ def on_watchlist(request, item_id):
 def listing_item(request, item_id):
     referring_url = request.META.get('HTTP_REFERER', '/')
     listing_item = Listing.objects.get(pk=item_id)
-    # has_highest_bid = listing_item.highest_bid is not None
     if request.user.is_authenticated:
         on_watchlist = request.user in listing_item.watchlist.all()
     else:
         on_watchlist = False
+    highest_bid = Bid.objects.filter(listing=listing_item).order_by('-bid_amount').first()
     return render(request, "auctions/listing_item.html", {
         "listing_item": listing_item,
         "referring_url": referring_url,
         "on_watchlist": on_watchlist,
         "comments": Comments.objects.filter(listing=listing_item),
-        # "has_highest_bid": has_highest_bid,
+        "highest_bid": highest_bid,
     })
 
 
-
-# def bid(request, item_id):
-#     if request.method == "POST":
-#         bid_value = int(request.POST["bid"])
-#         listing = Listing.objects.get(pk=item_id)
-        
-#         # Check if the listing has a highest bid
-#         if listing.highest_bid is None or bid_value > listing.highest_bid.bid:
-#             bid = Bid.objects.create(bid=bid_value, bidder=request.user)
-#             bid.save()
-#             listing.highest_bid = bid
-#             listing.save()
-    
-#     return HttpResponseRedirect(reverse("listing_item", args=(item_id,)))
-
-
-
 def add_comment(request, id):
-    message = request.POST['add_comment']
-
     add_comment = Comments(
         commenter = request.user,
         listing = Listing.objects.get(pk=id),
@@ -165,3 +145,14 @@ def add_comment(request, id):
     )
     add_comment.save()
     return HttpResponseRedirect(reverse("listing_item", args=(id, )))
+
+def place_bid(request, item_id):
+    if request.method == "POST":
+        bid_amount = float(request.POST.get('bid_amount', 0))
+        listing = Listing.objects.get(pk=item_id)
+        if bid_amount > listing.starting_bid:
+            bid = Bid.objects.create(listing=listing, bidder=request.user, bid_amount=bid_amount)
+            listing.highest_bid = bid
+            listing.save()
+        
+    return HttpResponseRedirect(reverse("listing_item", args=(item_id,)))
