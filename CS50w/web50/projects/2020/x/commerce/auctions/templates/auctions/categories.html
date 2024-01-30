@@ -1,13 +1,50 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+    <style>
+        .category-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 20rem;
+            margin-right: 10px;
+            margin-top: 10px;
+            overflow: hidden;
+            text-align: center;
+            padding: 10px; /* Add padding to the card */
+            border: 1px solid #ddd; /* Add border for better visibility */
+            border-radius: 8px; /* Add border radius for rounded corners */
+        }
+
+        .category-card-body {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-top: 10px; /* Add margin to the card body */
+        }
+
+        .btn-explore-category {
+            width: 90%;
+            margin-top: 10px; /* Add margin to the button */
+        }
+    </style>
+
     <div class="container">
         <h2>Categories</h2>
-
-        <ul>
-            {% for category in categories %}
-                <li><a href="{% url 'category' category.id %}">{{ category.category_name }}</a></li>
-            {% endfor %}
-        </ul>
+        {% if categories %}
+            <div class="row mx-3">
+                {% for category in categories %}
+                    <a href="{% url 'category' category.id %}" class="card category-card mx-1">
+                        <div class="category-card-body">
+                            <h5 class="card-title">{{ category.category_name }}</h5>
+                            <button class="btn btn-dark mx-3 btn-sm btn-explore-category">Explore Category</button>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No categories found.</p>
+        {% endif %}
     </div>
 {% endblock %}

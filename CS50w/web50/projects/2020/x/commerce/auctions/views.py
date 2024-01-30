@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Category, Listing, Bid, Comments
+from .models import User, Category, Listing, Comments#, Bid 
 
 
 def index(request):
@@ -65,21 +65,23 @@ def register(request):
         return render(request, "auctions/register.html")
 
 
+
+
 def create_listing(request):
     if request.method == "GET":
         return render(request, "auctions/create_listing.html", {
             "categories": Category.objects.values_list('category_name', flat=True)
         })
     else:
-        bid_value = int(request.POST["starting_bid"])
-        bid = Bid.objects.create(bid=bid_value, bidder=request.user)
-        # bid.save()
+        bid = Bid.objects.create(bid=0, bidder=request.user)
+        bid.save()
         add_listing = Listing(
             seller = request.user,
             category = Category.objects.get(category_name=request.POST["category"]),
             title = request.POST["title"],
             image = request.POST["image"],
-            starting_bid = bid,
+            starting_bid = float(request.POST["starting_bid"]),
+            highest_bid = bid,
             description = request.POST["description"],
             isActive = bool(request.POST.get("is_active", False))
         )
@@ -121,17 +123,36 @@ def on_watchlist(request, item_id):
 
 def listing_item(request, item_id):
     referring_url = request.META.get('HTTP_REFERER', '/')
-    listing_items = Listing.objects.get(pk=item_id)
-    if request.user in listing_items.watchlist.all():
-        on_watchlist = True
+    listing_item = Listing.objects.get(pk=item_id)
+    # has_highest_bid = listing_item.highest_bid is not None
+    if request.user.is_authenticated:
+        on_watchlist = request.user in listing_item.watchlist.all()
     else:
         on_watchlist = False
-    return render(request, "auctions/listing_item.html",{
-        "listing_item": listing_items,
+    return render(request, "auctions/listing_item.html", {
+        "listing_item": listing_item,
         "referring_url": referring_url,
         "on_watchlist": on_watchlist,
-        "comments": Comments.objects.filter(listing=Listing.objects.get(pk=item_id))
+        "comments": Comments.objects.filter(listing=listing_item),
+        # "has_highest_bid": has_highest_bid,
     })
+
+
+
+# def bid(request, item_id):
+#     if request.method == "POST":
+#         bid_value = int(request.POST["bid"])
+#         listing = Listing.objects.get(pk=item_id)
+        
+#         # Check if the listing has a highest bid
+#         if listing.highest_bid is None or bid_value > listing.highest_bid.bid:
+#             bid = Bid.objects.create(bid=bid_value, bidder=request.user)
+#             bid.save()
+#             listing.highest_bid = bid
+#             listing.save()
+    
+#     return HttpResponseRedirect(reverse("listing_item", args=(item_id,)))
+
 
 
 def add_comment(request, id):

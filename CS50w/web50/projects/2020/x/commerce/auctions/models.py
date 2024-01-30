@@ -13,13 +13,13 @@ class Category(models.Model):
     def __str__(self):
         return f"{self.id} {self.category_name}"
 
-class Bid(models.Model):
-    id = models.AutoField(primary_key=True)
-    bid = models.IntegerField(default=0)
-    bidder = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name="bidder")
+# class Bid(models.Model):
+#     id = models.AutoField(primary_key=True)
+#     bid = models.IntegerField(default=0)
+#     bidder = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name="bidder")
     
-    def __str__(self):
-        return str(self.bid)
+#     def __str__(self):
+#         return str(self.bid)
 
 class Listing(models.Model):
     id = models.AutoField(primary_key=True)
@@ -27,7 +27,8 @@ class Listing(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=64, null=True, blank=False)
     image = models.URLField(null=True, blank=True)
-    starting_bid = models.ForeignKey(Bid, on_delete=models.CASCADE, null=True, blank=True, related_name="bids")
+    starting_bid = models.FloatField()
+    # highest_bid = models.ForeignKey(Bid, on_delete=models.CASCADE, null=True, blank=True, related_name="bids")
     description = models.TextField(null=True, blank=False, max_length=500)
     isActive = models.BooleanField(default=True)
     watchlist = models.ManyToManyField(User, null=True, blank=True, related_name="watchlist")

@@ -13,13 +13,28 @@
                 <p>Listing ID - {{ listing_item.id }}</p>
                 <p>Description: {{ listing_item.description }}</p>
                 <p>Starting bid is {{ listing_item.starting_bid }}€</p>
-                
+                {% comment %} <p>Highes bid is {{ listing_item.highest_bid }}€</p> {% endcomment %}
                 {% if user.is_authenticated %}
                     {% if on_watchlist %}
-                        <form action="{% url 'off_watchlist' item_id=listing_item.id %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-dark">Remove From Watchlist</button>
-                        </form>
+                        <div class="container my-3">
+                            <form action="{% url 'off_watchlist' item_id=listing_item.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-dark btn-block" style="margin: 5px;">Remove From Watchlist</button>
+                            </form>
+                            {% comment %} {% if has_highest_bid %}
+                            <div class="container my-3">
+                                <form action="{% url 'bid' item_id=listing_item.id %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <input type="number" min="0" name="bid" placeholder="Enter your price" class="form-control" style="margin: 5px;">
+                                    </div>
+                                    <button type="submit" class="btn btn-dark btn-block" style="margin: 5px;">Place Your Bid</button>
+                                </form>
+                            </div> {% endcomment %}
+                        {% comment %} {% else %}
+                            <p>No bids have been placed yet.</p> {% endcomment %}
+                        {% comment %} {% endif %} {% endcomment %}
+                        </div>
                     {% else %}
                         <form action="{% url 'on_watchlist' item_id=listing_item.id %}" method="post">
                             {% csrf_token %}
