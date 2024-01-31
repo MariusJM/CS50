@@ -34,6 +34,8 @@ class Listing(models.Model):
     description = models.TextField(null=True, blank=False, max_length=500)
     isActive = models.BooleanField(default=True)
     watchlist = models.ManyToManyField(User, null=True, blank=True, related_name="watchlist")
+    winner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="won_listings")
+    is_closed = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Item Nr. {self.id} - {self.title}"

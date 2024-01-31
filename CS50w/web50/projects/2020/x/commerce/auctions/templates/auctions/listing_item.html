@@ -18,6 +18,17 @@
                         <p>No bids have been placed yet.</p>
                     {% endif %}
                 </div>
+                {% if is_seller and not listing_item.is_closed %}
+                    <form action="{% url 'close_auction' item_id=listing_item.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Close Auction</button>
+                    </form>
+                {% endif %}
+
+                {% if is_winner %}
+                    <p>Congratulations! You won the auction for "{{ listing_item.title }}".</p>
+                {% endif %}
+
                 {% if user.is_authenticated %}
                     {% if on_watchlist %}
                         <div class="container my-3">

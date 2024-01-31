@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.db.models import Max
-
+from django.contrib import messages
 
 from .models import User, Category, Listing, Comments, Bid
 
@@ -123,6 +123,8 @@ def on_watchlist(request, item_id):
 def listing_item(request, item_id):
     referring_url = request.META.get('HTTP_REFERER', '/')
     listing_item = Listing.objects.get(pk=item_id)
+    is_seller = request.user == listing_item.seller
+    is_winner = listing_item.is_closed and request.user == listing_item.winner
     if request.user.is_authenticated:
         on_watchlist = request.user in listing_item.watchlist.all()
     else:
@@ -134,6 +136,8 @@ def listing_item(request, item_id):
         "on_watchlist": on_watchlist,
         "comments": Comments.objects.filter(listing=listing_item),
         "highest_bid": highest_bid,
+        "is_seller": is_seller,
+        "is_winner": is_winner
     })
 
 
@@ -155,4 +159,20 @@ def place_bid(request, item_id):
             listing.highest_bid = bid
             listing.save()
         
+    return HttpResponseRedirect(reverse("listing_item", args=(item_id,)))
+
+def close_auction(request, item_id):
+    listing_item = Listing.objects.get(pk=item_id)
+    
+    if request.method == "POST" and request.user == listing_item.seller:
+        if not listing_item.is_closed:
+            listing_item.is_closed = True
+            # Determine the highest bidder (winner) and update the listing
+            highest_bidder = Bid.objects.filter(listing=listing_item).order_by('-bid_amount').first()
+            listing_item.winner = highest_bidder.bidder
+            listing_item.save()
+            messages.success(request, f'The auction for "{listing_item.title}" has been closed. The winner will be notified.')
+        else:
+            messages.warning(request, f'The auction for "{listing_item.title}" is already closed.')
+    
     return HttpResponseRedirect(reverse("listing_item", args=(item_id,)))
