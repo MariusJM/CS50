@@ -161,9 +161,8 @@ def place_bid(request, item_id):
         
     return HttpResponseRedirect(reverse("listing_item", args=(item_id,)))
 
-def close_auction(request, item_id):
+def close_listing(request, item_id):
     listing_item = Listing.objects.get(pk=item_id)
-    
     if request.method == "POST" and request.user == listing_item.seller:
         if not listing_item.is_closed:
             listing_item.is_closed = True

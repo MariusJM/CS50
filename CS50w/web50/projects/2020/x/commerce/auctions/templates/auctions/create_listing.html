@@ -2,39 +2,62 @@
 
 {% block body %}
     <h2>Create Listing</h2>
+    <div class="container border p-3">
+        <form action="{% url 'create_listing' %}" method="POST">
+            {% csrf_token %}
 
-    <form action="{% url 'create_listing' %}" method="POST">
-        {% csrf_token %}
-    
-        <div class="form-group">
-            <label for="category">Category</label>
-            <select name="category" id="category" class="form-control">
-                {% for category in categories %}
-                    <option value="{{ category }}">{{ category }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div>
-            <label for="title">Title</label>
-            <input type="text" name="title" placeholder="Enter Title" id="title" required>
-        </div>
-        
-        <div>
-            <label for="image">Image URL</label>
-            <input type="text" name="image" placeholder="Image URL address" id="image">
-        </div>
-        <div>
-            <label for="starting_bid">Starting Bid</label>
-            <input type="number" name="starting_bid" placeholder="Starting Bid" id="starting_bid" min="5" required>
-        </div>
-        <div>
-            <label for="description">Description</label>
-            <input type="text" name="description" placeholder="Description" id="description" required>
-        </div>
-        <div>
-            <label for="is_active">Is Active</label>
-            <input type="checkbox" name="is_active" placeholder="Is Active" id="is_active" checked>
-        </div>
-        <button type="submit" class="btn btn-dark">Create New Listing</button>
-    </form>
+            <div class="form-group row">
+                <label for="title" class="col-sm-2 col-form-label">Title</label>
+                <div class="col-sm-10">
+                    <input type="text" name="title" class="form-control" id="title" placeholder="Enter Title" required>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="category" class="col-sm-2 col-form-label">Category</label>
+                <div class="col-sm-10">
+                    <select name="category" id="category" class="form-control">
+                        <option value="" selected disabled>Select a category</option>
+                        {% for category in categories %}
+                            <option value="{{ category }}">{{ category }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="image" class="col-sm-2 col-form-label">Image URL</label>
+                <div class="col-sm-10">
+                    <input type="text" name="image" class="form-control" id="image" placeholder="Image URL address">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="starting_bid" class="col-sm-2 col-form-label">Starting Bid</label>
+                <div class="col-sm-10">
+                    <input type="number" name="starting_bid" class="form-control" id="starting_bid" placeholder="Starting Bid" min="5" required>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="description" class="col-sm-2 col-form-label">Description</label>
+                <div class="col-sm-10">
+                    <input type="text" name="description" class="form-control" id="description" placeholder="Description" required>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="is_active" class="col-sm-2 col-form-label">Is Active</label>
+                <div class="col-sm-10">
+                    <input type="checkbox" name="is_active" class="form-check-input" id="is_active" checked>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-10 offset-sm-2">
+                    <button type="submit" class="btn btn-dark">Create New Listing</button>
+                </div>
+            </div>
+        </form>
+    </div>
 {% endblock %}

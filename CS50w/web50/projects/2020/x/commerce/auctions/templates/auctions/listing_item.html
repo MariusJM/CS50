@@ -19,9 +19,9 @@
                     {% endif %}
                 </div>
                 {% if is_seller and not listing_item.is_closed %}
-                    <form action="{% url 'close_auction' item_id=listing_item.id %}" method="post">
+                    <form action="{% url 'close_listing' item_id=listing_item.id %}" method="post">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-danger">Close Auction</button>
+                        <button type="submit" class="btn btn-danger">Close Listing</button>
                     </form>
                 {% endif %}
 
