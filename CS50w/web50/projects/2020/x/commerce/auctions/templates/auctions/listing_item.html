@@ -26,33 +26,37 @@
                 {% endif %}
 
                 {% if is_winner %}
+                <div class="container my-3 border rounded p-3" style="background-color: darkgreen; color: white;">
                     <p>Congratulations! You won the auction for "{{ listing_item.title }}".</p>
-                {% endif %}
+                </div>
+                    {% endif %}
 
                 {% if user.is_authenticated %}
-                    {% if on_watchlist %}
-                        <div class="container my-3">
-                            <form action="{% url 'off_watchlist' item_id=listing_item.id %}" method="post">
+                    {% if not listing_item.is_closed %}
+                        {% if on_watchlist %}
+                            <div class="container my-3">
+                                <form action="{% url 'off_watchlist' item_id=listing_item.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-dark btn-block" style="margin: 5px;">Remove From Watchlist</button>
+                                </form>
+                            </div>
+                        {% else %}
+                            <form action="{% url 'on_watchlist' item_id=listing_item.id %}" method="post">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-dark btn-block" style="margin: 5px;">Remove From Watchlist</button>
+                                <button type="submit" class="btn btn-dark">Add To Watchlist</button>
+                            </form>
+                        {% endif %}
+                        <div class="container my-3">
+                            <form action="{% url 'place_bid' item_id=listing_item.id %}" method="post">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="bid_amount">Place Bid:</label>
+                                    <input type="number" name="bid_amount" step="0.01" min="{{ highest_bid.bid_amount|default:listing_item.starting_bid }}" placeholder="Enter bid amount" class="form-control" required>
+                                </div>
+                                <button type="submit" class="btn btn-dark btn-block">Place Bid</button>
                             </form>
                         </div>
-                    {% else %}
-                        <form action="{% url 'on_watchlist' item_id=listing_item.id %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-dark">Add To Watchlist</button>
-                        </form>
                     {% endif %}
-                    <div class="container my-3">
-                        <form action="{% url 'place_bid' item_id=listing_item.id %}" method="post">
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <label for="bid_amount">Place Bid:</label>
-                                <input type="number" name="bid_amount" step="0.01" min="{{ highest_bid.bid_amount|default:listing_item.starting_bid }}" placeholder="Enter bid amount" class="form-control" required>
-                            </div>
-                            <button type="submit" class="btn btn-dark btn-block">Place Bid</button>
-                        </form>
-                    </div>
                 {% endif %}
             </div>
         </div>
@@ -64,7 +68,7 @@
                     {% endfor %}
                 </ul>
         
-                {% if user.is_authenticated %}
+                {% if user.is_authenticated and not listing_item.is_closed %}
                     <div class="container my-3">
                         <form action="{% url 'add_comment' id=listing_item.id %}" method="post">
                             {% csrf_token %}

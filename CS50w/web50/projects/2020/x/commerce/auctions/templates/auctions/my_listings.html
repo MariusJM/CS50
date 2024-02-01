@@ -1,0 +1,70 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<style>
+    .card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 20rem; /* Set the width to your desired value */
+        margin-right: 10px; /* Adjust the horizontal margin between cards */
+        margin-top: 10px;
+    }
+
+    .card-body {
+        flex-grow: 1;
+    }
+
+    .card-text {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3; /* Adjust the number of lines to your preference */
+        -webkit-box-orient: vertical;
+    }
+
+    .btn-see-details {
+        width: 90%;
+    }
+</style>
+    <div class="container">
+        <h2>My Listings</h2>
+        <hr>
+            <div class="row mx-3">
+                {% if listings %}
+                    {% for item in listings %}
+                        <div class="card mx-1">
+                            <img src="{{ item.image }}" class="card-img-top" alt="{{ item.title }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ item.title }}</h5>
+                                <p class="card-text">{{ item.description }}</p>
+                                <a href="{% url 'listing_item' item.id%}" class="btn btn-dark mx-3 btn-sm btn-see-details">See Details</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>You have not created any listings yet.</p>
+                {% endif %}
+            </div>
+        <hr>
+        <h2>My Wins</h2>
+        <hr>
+            <div class="row mx-3">
+                {% if listings %}
+                    {% for item in listings_won %}
+                        <div class="card mx-1">
+                            <img src="{{ item.image }}" class="card-img-top" alt="{{ item.title }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ item.title }}</h5>
+                                <p class="card-text">{{ item.description }}</p>
+                                <a href="{% url 'listing_item' item.id%}" class="btn btn-dark mx-3 btn-sm btn-see-details">See Details</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>You have not won any items yet.</p>
+                {% endif %}
+            </div>
+        <hr>
+    </div>
+{% endblock %}

@@ -11,7 +11,7 @@ from .models import User, Category, Listing, Comments, Bid
 
 def index(request):
     return render(request, "auctions/index.html",{
-        "listings":Listing.objects.filter(isActive=True)
+        "listings":Listing.objects.filter(is_closed=False)
     })
 
 
@@ -96,7 +96,7 @@ def categories(request):
 
 def category(request, category_id):
     category = Category.objects.get(pk=category_id)
-    category_listings = Listing.objects.filter(category=category)
+    category_listings = Listing.objects.filter(category=category, is_closed=False)
     return render(request, "auctions/category.html", {
         "category_listings": category_listings
     })
@@ -167,12 +167,20 @@ def close_auction(request, item_id):
     if request.method == "POST" and request.user == listing_item.seller:
         if not listing_item.is_closed:
             listing_item.is_closed = True
-            # Determine the highest bidder (winner) and update the listing
             highest_bidder = Bid.objects.filter(listing=listing_item).order_by('-bid_amount').first()
-            listing_item.winner = highest_bidder.bidder
-            listing_item.save()
-            messages.success(request, f'The auction for "{listing_item.title}" has been closed. The winner will be notified.')
+            if highest_bidder:
+                listing_item.winner = highest_bidder.bidder
+                listing_item.save()
+                messages.success(request, f'The auction for "{listing_item.title}" has been closed. The winner will be notified.')
+            else:
+                messages.warning(request, f'The auction for "{listing_item.title}" cannot be closed as there are no bids.')
         else:
             messages.warning(request, f'The auction for "{listing_item.title}" is already closed.')
-    
     return HttpResponseRedirect(reverse("listing_item", args=(item_id,)))
+
+def my_listings(request):
+    current_user = request.user
+    return render(request, "auctions/my_listings.html", {
+        "listings":Listing.objects.filter(seller=current_user),
+        "listings_won":Listing.objects.filter(winner=current_user),
+    })
