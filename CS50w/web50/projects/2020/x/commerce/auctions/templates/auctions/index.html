@@ -9,6 +9,7 @@
             width: 20rem; /* Set the width to your desired value */
             margin-right: 10px; /* Adjust the horizontal margin between cards */
             margin-top: 10px;
+            overflow: hidden;
         }
 
         .card-body {
@@ -22,6 +23,11 @@
             -webkit-line-clamp: 3; /* Adjust the number of lines to your preference */
             -webkit-box-orient: vertical;
         }
+        .card-img-top{
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+        }
 
         .btn-see-details {
             width: 90%;
@@ -32,10 +38,23 @@
         <h2>Active Listings</h2>
         <div class="row mx-3">
             {% for item in listings %}
-                <div class="card mx-1" style="overflow: hidden;">
-                    <img src="{{ item.image }}" class="card-img-top" alt="{{ item.title }}" style="height: 200px; width: 100%; object-fit: cover;">
+                <div class="card mx-1">
+                    {% if item.image %}
+                        <img src="{{ item.image }}" class="card-img-top" alt="{{ item.title }}">
+                    {% else %}
+                        <img src="https://www.webfx.com/wp-content/uploads/2021/10/generic-image-placeholder.png" class="card-img-top" alt="Default image if image URL is not provided">
+                    {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{ item.title }}</h5>
+                        {% if user.is_authenticated %}
+                            {% if item.highest_bid %}
+                                <p>Highest Bid ${{ item.highest_bid.bid_amount }}</p>
+                            {% else %}
+                                <p>Starting Bid ${{ item.starting_bid }}</p>
+                            {% endif %}
+                        {% else %}
+                            <p>Starting Bid ${{ item.starting_bid }}</p>
+                        {% endif %}
                         <p class="card-text">{{ item.description }}</p>
                         <a href="{% url 'listing_item' item.id%}" class="btn btn-dark mx-3 btn-sm btn-see-details">See Details</a>
                     </div>

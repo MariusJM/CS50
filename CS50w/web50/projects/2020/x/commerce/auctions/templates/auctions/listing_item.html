@@ -4,7 +4,11 @@
     <div class="container border p-3">
         <div class="row">
             <div class="col-md-8">
-                <img src="{{ listing_item.image }}" class="img-fluid" alt="{{ listing_item.title }}">
+                {% if listing_item.image %}
+                    <img src="{{ listing_item.image }}" class="card-img-top" alt="{{ listing_item.title }}">
+                {% else %}
+                    <img src="https://www.webfx.com/wp-content/uploads/2021/10/generic-image-placeholder.png" class="card-img-top" alt="Default image if image URL is not provided">
+                {% endif %}
             </div>
             <div class="col-md-4">
                 <h1>{{ listing_item.title }}</h1>

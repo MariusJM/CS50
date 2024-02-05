@@ -1,3 +1,36 @@
 body {
     padding: 10px;
 }
+
+/* I LEFT SOME CSS STYLE IN HTML BECAUSE I COULDN"T GET IT TO WORK USING styles.css*/
+/* CSS file is loaded after bootstrap so it should overwrite bootstrap, but it doesn't*/
+.card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 20rem; /* Set the width to your desired value */
+    margin-right: 10px; /* Adjust the horizontal margin between cards */
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.card-body {
+    flex-grow: 1;
+}
+
+.card-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Adjust the number of lines to your preference */
+    -webkit-box-orient: vertical;
+}
+.card-img-top{
+    height: 200px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.btn-see-details {
+    width: 90%;
+}

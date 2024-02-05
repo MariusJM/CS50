@@ -32,7 +32,7 @@
         }
 
         .btn-see-details {
-            width: 100%;
+            width: 90%;
         }
     </style>
 
@@ -42,9 +42,22 @@
             <div class="row mx-3">
                 {% for item in category_listings %}
                     <div class="card mx-1" style="width: 20rem;">
-                        <img src="{{ item.image }}" class="card-img-top" alt="{{ item.title }}">
+                        {% if item.image %}
+                            <img src="{{ item.image }}" class="card-img-top" alt="{{ item.title }}">
+                        {% else %}
+                            <img src="https://www.webfx.com/wp-content/uploads/2021/10/generic-image-placeholder.png" class="card-img-top" alt="Default image if image URL is not provided">
+                        {% endif %}
                         <div class="card-body">
                             <h5 class="card-title">{{ item.title }}</h5>
+                            {% if user.is_authenticated %}
+                                {% if item.highest_bid %}
+                                    <p>Highest Bid ${{ item.highest_bid.bid_amount }}</p>
+                                {% else %}
+                                    <p>Starting Bid ${{ item.starting_bid }}</p>
+                                {% endif %}
+                            {% else %}
+                                <p>Starting Bid ${{ item.starting_bid }}</p>
+                            {% endif %}
                             <p class="card-text">{{ item.description }}</p>
                             <a href="{% url 'listing_item' item.id%}" class="btn btn-dark mx-3 btn-sm btn-see-details">See Details</a>
                         </div>
