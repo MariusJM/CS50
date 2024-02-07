@@ -112,16 +112,15 @@ This repository contains my code and projects completed during Harvard's CS50's 
    - ...
 
         ### Preview
-        TODO
+     [![image](https://github.com/MariusJM/CS50/assets/13520319/4815394b-56f7-4585-bb44-74632dbb8bbf)](https://youtu.be/UGpdWaclvQk?si=fWxKSHUkmI-5BXNV)
 
----
 
 2. **Project 1: [Wiki](https://cs50.harvard.edu/web/2020/projects/1/wiki/)**
    - Design a Wikipedia-like online encyclopedia.
    - ...
 
         ### Preview
-        TODO
+        [![image](https://github.com/MariusJM/CS50/assets/13520319/a7aac111-3437-4aa7-81eb-34f66082fed0)](https://youtu.be/v3N3IWSwyI4?si=mv_WKab8FhdXAPKN)
 
 ---
 
@@ -129,7 +128,8 @@ This repository contains my code and projects completed during Harvard's CS50's 
    - Design an eBay-like e-commerce auction site that will allow users to post auction listings, place bids on listings, comment on those listings, and add listings to a “watchlist.”
    - ...
         ### Preview
-        TODO
+        [![image](https://github.com/MariusJM/CS50/assets/13520319/9c9d5fb2-d161-489e-ae12-80f29507d8ce)](https://youtu.be/xKeAhtM9xvw?si=mWubdRDRr-c4eiLo)
+
 
 ---
 
