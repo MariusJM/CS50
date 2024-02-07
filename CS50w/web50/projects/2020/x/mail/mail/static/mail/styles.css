@@ -1,6 +1,25 @@
 textarea {
     min-height: 400px;
 }
-body{
+/* body{
     background-color: #5c5e60;;
+} */
+.email-container{
+    display: flex;
+    flex-direction:row;
+    background-color: rgb(242, 242, 242);
+    height: 40px;
+    max-width: 100%;
+    border: 1px solid black;
+    border-radius: 5px;
+    /* justify-content: center; */
+    align-items:center;
+    cursor: pointer;
+    /* padding: 20px; */
+}
+.email-container:hover{
+    background-color: white;
+}
+.email-container:active{
+    background-color: gray;
 }

@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
   document.querySelector('#compose').addEventListener('click', compose_email);
-  document.querySelector('#send').addEventListener("click", send_mail);
+  document.querySelector("#send").addEventListener("click", send_mail);
 
   // By default, load the inbox
   load_mailbox('inbox');
@@ -36,19 +36,26 @@ function load_mailbox(mailbox) {
     .then(response => response.json())
     .then(emails => {
         // Print emails
-        console.log(emails);
+        // console.log(emails);
         // ... do something else with emails ...
-        
+
         emails.forEach(email => {
           const element = document.createElement('div');
-          element.innerHTML = `${email.sender} ${email.subject}`;
+          element.innerHTML = `${email.sender} ${email.subject} ${email.timestamp}`;
+          element.className = 'email-container';
+          element.addEventListener('click', () => view_mail(email.id));
           document.querySelector('#emails-view').appendChild(element);
         });
   });
 }        
 
+function view_mail(id){
+  console.log("Trying to view email item")
+}
 
-function send_mail(){
+
+function send_mail(event){
+  event.preventDefault();
   // console.log("Send button clicked!");
   const recipients = document.querySelector("#compose-recipients").value;
   const subject = document.querySelector("#compose-subject").value;
@@ -66,6 +73,15 @@ function send_mail(){
   .then(result => {
       // Print result
       console.log(result);
-      load_mailbox('sent');
+      
+      if (result.message === "Email sent successfully.") {
+        console.log(result.message);
+        load_mailbox('sent');
+      } else {
+        console.log(`Email sending failed ${result.message}`);
+      };
+  })
+  .catch(error => {
+    console.error('Fetch error:', error.message);
   });
 };
