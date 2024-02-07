@@ -7,7 +7,7 @@ textarea {
 .email-container{
     display: flex;
     flex-direction:row;
-    background-color: rgb(242, 242, 242);
+    background-color: white;
     height: 40px;
     max-width: 100%;
     border: 1px solid black;
@@ -18,8 +18,11 @@ textarea {
     /* padding: 20px; */
 }
 .email-container:hover{
-    background-color: white;
+    background-color: rgb(255, 243, 207);
 }
 .email-container:active{
+    background-color: gray;
+}
+.dark{
     background-color: gray;
 }

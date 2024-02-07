@@ -42,7 +42,13 @@ function load_mailbox(mailbox) {
         emails.forEach(email => {
           const element = document.createElement('div');
           element.innerHTML = `${email.sender} ${email.subject} ${email.timestamp}`;
-          element.className = 'email-container';
+          if (email.read == true){
+            console.log("Read")
+            element.className = 'email-container dark';
+          } else {
+            console.log("Unread")
+            element.className = 'email-container';
+          }
           element.addEventListener('click', () => view_mail(email.id));
           document.querySelector('#emails-view').appendChild(element);
         });
