@@ -63,15 +63,21 @@ function view_mail(id){
   fetch(`/emails/${id}`)
     .then(response => response.json())
     .then(email => {
-        // Print email
-        console.log(email);
+      // Print email
+      console.log(email);
+      // ... do something else with email ...
       document.querySelector(".sender").innerHTML = email.sender
       document.querySelector(".recipients").innerHTML = email.recipients
       document.querySelector(".subject").innerHTML = email.subject
       document.querySelector(".timestamp").innerHTML = email.timestamp
       document.querySelector(".body").innerHTML = email.body
-        // ... do something else with email ...
     });
+  fetch(`/emails/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+        read: true
+    })
+  })
 }
 
 
