@@ -28,7 +28,7 @@ function load_mailbox(mailbox) {
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
-
+  document.querySelector('#email-view').style.display = 'none';
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
@@ -57,6 +57,21 @@ function load_mailbox(mailbox) {
 
 function view_mail(id){
   console.log("Trying to view email item")
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#email-view').style.display = 'block';
+  
+  fetch(`/emails/${id}`)
+    .then(response => response.json())
+    .then(email => {
+        // Print email
+        console.log(email);
+      document.querySelector(".sender").innerHTML = email.sender
+      document.querySelector(".recipients").innerHTML = email.recipients
+      document.querySelector(".subject").innerHTML = email.subject
+      document.querySelector(".timestamp").innerHTML = email.timestamp
+      document.querySelector(".body").innerHTML = email.body
+        // ... do something else with email ...
+    });
 }
 
 
