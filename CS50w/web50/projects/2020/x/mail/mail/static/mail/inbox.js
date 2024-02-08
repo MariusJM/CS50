@@ -48,10 +48,10 @@ function load_mailbox(mailbox) {
           element.innerHTML = `${email.sender} ${email.subject} ${email.timestamp}`;
           if (email.read == true){
             console.log("Read")
-            element.className = 'email-container dark';
+            element.className = 'email-container form-control dark';
           } else {
             console.log("Unread")
-            element.className = 'email-container';
+            element.className = 'email-container form-control';
           }
           element.addEventListener('click', () => view_mail(email.id));
           document.querySelector('#emails-view').appendChild(element);
@@ -72,10 +72,10 @@ function view_mail(id){
       // Print email
       console.log(email);
       // ... do something else with email ...
-      document.querySelector(".sender").innerHTML = email.sender
-      document.querySelector(".recipients").innerHTML = email.recipients
-      document.querySelector(".subject").innerHTML = email.subject
-      document.querySelector(".timestamp").innerHTML = email.timestamp
+      document.querySelector(".sender").innerHTML = `<strong>From: </strong>${email.sender}`
+      document.querySelector(".recipients").innerHTML = `<strong>To: </strong>${email.recipients}`
+      document.querySelector(".subject").innerHTML = `<strong>Subject: </strong>${email.subject}`
+      document.querySelector(".timestamp").innerHTML = `<strong>Date Sent: </strong>${email.timestamp}`
       document.querySelector(".body").innerHTML = email.body
 
 	  const sender = email.sender;

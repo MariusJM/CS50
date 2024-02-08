@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block body %}
-    <h2>{{ request.user.email }}</h2>
+    <h2 class="form-control">{{ request.user.email }}</h2>
 
     <button class="btn btn-sm btn-outline-primary" id="inbox">Inbox</button>
     <button class="btn btn-sm btn-outline-primary" id="compose">Compose</button>
@@ -33,16 +33,16 @@
 
     <div id="email-view">
         <div class="email-preview">
-            <div class="sender"></div>
-            <div class="recipients"></div>
-            <div class="subject"></div>
-            <div class="timestamp"></div>
+            <div class="sender email-field"></div>
+            <div class="recipients email-field"></div>
+            <div class="subject email-field"></div>
+            <div class="timestamp email-field"></div>
             <div class="body"></div>
         </div>
     </div>
     <div id="mail-buttons">
-        <div class="reply-button">Reply</div>
-        <div class="archive-button">Archive</div>
+        <div class="reply-button btn btn-primary">Reply</div>
+        <div class="archive-button btn btn-warning">Archive</div>
     </div>
 {% endblock %}
 

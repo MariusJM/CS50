@@ -5,17 +5,14 @@ textarea {
     background-color: #5c5e60;;
 } */
 .email-container{
-    display: flex;
+    /* display: flex;
     flex-direction:row;
-    background-color: white;
     height: 40px;
     max-width: 100%;
     border: 1px solid black;
     border-radius: 5px;
-    /* justify-content: center; */
-    align-items:center;
+    align-items:center; */
     cursor: pointer;
-    /* padding: 20px; */
 }
 .email-container:hover{
     background-color: rgb(255, 243, 207);
@@ -29,64 +26,14 @@ textarea {
     justify-content: center;
     align-items: center;
 }
-.archive-button{
-    background-color: gray;
-}
-.archive-button:hover{
-    background-color: lightgray;
-}
-.archive-button:active{
-    background-color: darkgray;
-}
-.reply-button{
-    background-color: gray;
-}
-.reply-button:hover{
-    background-color: lightgray;
-}
-.reply-button:active{
-    background-color: darkgray;
-}
 .dark{
-    background-color: gray;
+    background-color: #e9ecef;
 }
 .email-preview{
     display: flex;
     flex-direction: column;
-    background-color: gray;
+    background-color: white;
 }
-.sender{
-    background-color: beige;
-    border: 1px solid black;
-    padding: 10px;
-    width: 600px;
-    height: 80px;
-}
-.recipients{
-    background-color: beige;
-    border: 1px solid black;
-    padding: 10px;
-    width: 600px;
-    height: 80px;
-}
-.subject{
-    background-color: beige;
-    border: 1px solid black;
-    padding: 10px;
-    width: 600px;
-    height: 80px;
-}
-.timestamp{
-    background-color: beige;
-    border: 1px solid black;
-    padding: 10px;
-    width: 600px;
-    height: 80px;
-}
-.body{
-    background-color: beige;
-    border: 1px solid black;
-    padding: 10px;
-    width: 600px;
-    height: 80px;
+.email-field{
+    border-bottom: 1px solid darkgray;
 }
