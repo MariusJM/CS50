@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
   document.querySelector('#compose').addEventListener('click', compose_email);
   document.querySelector("#send").addEventListener("click", send_mail);
-  
+
   // By default, load the inbox
   load_mailbox('inbox');
 });
@@ -85,15 +85,42 @@ function view_mail(id){
       document.querySelector(".archive-button").innerHTML = "Unarchive"
       document.querySelector(".archive-button").id = "unarchive"
       document.querySelector(".archive-button").addEventListener("click", () => unarchive_mail(id))
+      document.querySelector(".reply-button").addEventListener("click", () => reply_email(id))
     } else {
       document.querySelector(".archive-button").innerHTML = "Archive"
       document.querySelector(".archive-button").id = "archive"
       document.querySelector(".archive-button").addEventListener("click", () => archive_mail(id))
+      document.querySelector(".reply-button").addEventListener("click", () => reply_email(id))
     }
 
 
   });
-    
+
+function reply_email(id){
+  console.log(id)
+  // Show compose view and hide other views
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#email-view').style.display = 'none';
+  document.querySelector('#mail-buttons').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'block';
+
+  fetch(`/emails/${id}`)
+  .then(response => response.json())
+  .then(email => {
+    document.querySelector('#compose-recipients').value = email.sender
+    console.log(email.subject.slice(0,3))
+    if (email.subject.slice(0,3) === "Re:"){
+      document.querySelector('#compose-subject').value = email.subject;
+    } else {
+      document.querySelector('#compose-subject').value = `Re: ${email.subject}`;
+    }
+    document.querySelector('#compose-body').value = `\n\nOn ${email.timestamp} ${email.sender} wrote:\n ${email.body}`;
+    document.querySelector('#compose-body').focus();
+    document.querySelector('#compose-body').setSelectionRange(0, 0);
+  })
+};
+
+
   fetch(`/emails/${id}`, {
     method: 'PUT',
     body: JSON.stringify({
