@@ -23,6 +23,30 @@ textarea {
 .email-container:active{
     background-color: gray;
 }
+.mail-buttons{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.archive-button{
+    background-color: gray;
+}
+.archive-button:hover{
+    background-color: lightgray;
+}
+.archive-button:active{
+    background-color: darkgray;
+}
+.reply-button{
+    background-color: gray;
+}
+.reply-button:hover{
+    background-color: lightgray;
+}
+.reply-button:active{
+    background-color: darkgray;
+}
 .dark{
     background-color: gray;
 }
