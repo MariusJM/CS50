@@ -2,13 +2,14 @@
 {% load static %}
 
 {% block body %}
-    <h2 class="form-control">{{ request.user.email }}</h2>
-
-    <button class="btn btn-sm btn-outline-primary" id="inbox">Inbox</button>
-    <button class="btn btn-sm btn-outline-primary" id="compose">Compose</button>
-    <button class="btn btn-sm btn-outline-primary" id="sent">Sent</button>
-    <button class="btn btn-sm btn-outline-primary" id="archived">Archived</button>
-    <a class="btn btn-sm btn-outline-primary" href="{% url 'logout' %}">Log Out</a>
+    <h2>{{ request.user.email }}</h2>
+    <div class="navigation">
+        <button class="btn btn-sm btn-outline-primary" id="inbox">Inbox</button>
+        <button class="btn btn-sm btn-outline-primary" id="compose">Compose</button>
+        <button class="btn btn-sm btn-outline-primary" id="sent">Sent</button>
+        <button class="btn btn-sm btn-outline-primary" id="archived">Archived</button>
+        <a class="btn btn-sm btn-outline-primary" href="{% url 'logout' %}">Log Out</a>
+    </div>
     <hr>
 
     <div id="emails-view">
@@ -37,10 +38,10 @@
             <div class="recipients email-field"></div>
             <div class="subject email-field"></div>
             <div class="timestamp email-field"></div>
-            <div class="body"></div>
+            <div class="body email-field-body"></div>
         </div>
     </div>
-    <div id="mail-buttons">
+    <div id="mail-buttons" class="mail-buttons-container">
         <div class="reply-button btn btn-primary">Reply</div>
         <div class="archive-button btn btn-warning">Archive</div>
     </div>

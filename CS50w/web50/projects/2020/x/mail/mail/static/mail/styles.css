@@ -1,18 +1,11 @@
 textarea {
     min-height: 400px;
 }
-/* body{
-    background-color: #5c5e60;;
-} */
 .email-container{
-    /* display: flex;
-    flex-direction:row;
-    height: 40px;
-    max-width: 100%;
-    border: 1px solid black;
-    border-radius: 5px;
-    align-items:center; */
     cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 .email-container:hover{
     background-color: rgb(255, 243, 207);
@@ -20,20 +13,39 @@ textarea {
 .email-container:active{
     background-color: gray;
 }
-.mail-buttons{
+.email-sender-subject {
+    flex-grow: 1; 
+  }
+  
+  .email-timestamp {
+    white-space: nowrap; 
+  }
+.mail-buttons-container {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-end;
+    padding-top: 15px;
 }
 .dark{
     background-color: #e9ecef;
 }
-.email-preview{
+.email-preview {
     display: flex;
     flex-direction: column;
-    background-color: white;
-}
-.email-field{
+    padding: 20px;
+    box-shadow: 4px 4px 10px 0px rgba(0, 0, 0, 0.19);
+    border: 1px solid #ddd;
+  }
+.email-field {
     border-bottom: 1px solid darkgray;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    font-size: 16px;
 }
+.email-field-body{
+    display: flex;
+    font-size: 14px;
+    white-space: pre-line;
+}
+#email-view {
+    margin-bottom: 20px;
+  }

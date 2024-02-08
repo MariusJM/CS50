@@ -45,12 +45,18 @@ function load_mailbox(mailbox) {
 
         emails.forEach(email => {
           const element = document.createElement('div');
-          element.innerHTML = `${email.sender} ${email.subject} ${email.timestamp}`;
+          element.innerHTML = `
+            <div class="email-sender-subject">
+              <span class="email-sender"><strong>${email.sender} - </strong></span>
+              <span class="email-subject">${email.subject}</span>
+            </div>
+            <div class="email-timestamp">${email.timestamp}</div>
+          `;
           if (email.read == true){
-            console.log("Read")
+            // console.log("Read")
             element.className = 'email-container form-control dark';
           } else {
-            console.log("Unread")
+            // console.log("Unread")
             element.className = 'email-container form-control';
           }
           element.addEventListener('click', () => view_mail(email.id));
@@ -60,7 +66,7 @@ function load_mailbox(mailbox) {
 }        
 
 function view_mail(id){
-  console.log("Trying to view email item")
+  // console.log("Trying to view email item")
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#email-view').style.display = 'block';
   const user = document.querySelector("h2").innerHTML
@@ -70,7 +76,7 @@ function view_mail(id){
     .then(response => response.json())
     .then(email => {
       // Print email
-      console.log(email);
+      // console.log(email);
       // ... do something else with email ...
       document.querySelector(".sender").innerHTML = `<strong>From: </strong>${email.sender}`
       document.querySelector(".recipients").innerHTML = `<strong>To: </strong>${email.recipients}`
@@ -97,7 +103,7 @@ function view_mail(id){
   });
 
 function reply_email(id){
-  console.log(id)
+  // console.log(id)
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#email-view').style.display = 'none';
@@ -108,7 +114,7 @@ function reply_email(id){
   .then(response => response.json())
   .then(email => {
     document.querySelector('#compose-recipients').value = email.sender
-    console.log(email.subject.slice(0,3))
+    // console.log(email.subject.slice(0,3))
     if (email.subject.slice(0,3) === "Re:"){
       document.querySelector('#compose-subject').value = email.subject;
     } else {
@@ -131,7 +137,7 @@ function reply_email(id){
 }
 
 function archive_mail(id){
-  console.log(`Trying to archive mail ${id}`)
+  // console.log(`Trying to archive mail ${id}`)
   fetch(`/emails/${id}`, {
     method: 'PUT',
     body: JSON.stringify({
@@ -146,7 +152,7 @@ function archive_mail(id){
 }
 
 function unarchive_mail(id){
-  console.log(`Trying to unarchive mail ${id}`)
+  // console.log(`Trying to unarchive mail ${id}`)
   fetch(`/emails/${id}`, {
     method: 'PUT',
     body: JSON.stringify({
@@ -182,10 +188,8 @@ function send_mail(event){
       console.log(result);
       
       if (result.message === "Email sent successfully.") {
-        console.log(result.message);
+        // console.log(result.message);
         load_mailbox('sent');
-      } else {
-        console.log(`Email sending failed ${result.message}`);
       };
   })
   .catch(error => {
