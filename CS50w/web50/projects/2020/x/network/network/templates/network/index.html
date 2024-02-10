@@ -30,6 +30,7 @@
         }
     </script>
 
+    {% if user.is_authenticated %}
     <section class="middle">
         <div class="new-post">
             <form method="post" action="{% url 'create_post' %}">
@@ -41,16 +42,20 @@
             </form>
         </div>
     </section>
-    <section class="middle">
+    {% endif %}
+
+    <section class="middle new-post">
         <div>
             <ul>
                 {% for item in posts %}
                 <li>
-                    <h2>{{ item.author }}</h2>
+                    <h4>{{ item.author }} posted:</h4>
                     <div>
                         <p>{{ item.content }}</p>
-                        <div>{{ item.created_at }}</div>
-                        <div>{{ item.updated_at}}</div>
+                        <div>
+                            <div>date created {{ item.created_at }}</div>
+                            <div>Likes {{ item.likes}}</div>
+                        </div>
                     </div>
                 </li>
                 {% endfor %}

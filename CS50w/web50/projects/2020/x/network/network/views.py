@@ -8,7 +8,7 @@ from .models import User, PostContent
 
 
 def index(request):
-    posts = PostContent.objects.all()
+    posts = PostContent.objects.all().order_by('-created_at')
     return render(request, "network/index.html",{
         "posts": posts
     })
@@ -74,4 +74,3 @@ def create_post(request):
             return HttpResponseRedirect(reverse('index'))
 
     return render(request, 'network/index.html', {'message': 'Failed to create post.'})
-
