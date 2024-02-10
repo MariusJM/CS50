@@ -12,9 +12,9 @@
         .new-post textarea {
             width: 100%;
             box-sizing: border-box;
-            resize: vertical; /* Allow vertical resizing */
-            height: 2em; /* Initial height */
-            overflow-y: hidden; /* Hide vertical scrollbar initially */
+            resize: vertical;
+            height: 2em;
+            overflow-y: hidden;
         }
 
         .new-post button {
@@ -25,17 +25,37 @@
     <script>
         function autoResize() {
             var textarea = document.querySelector('.new-post textarea');
-            textarea.style.height = 'auto'; /* Reset height to auto to calculate the actual height needed */
-            textarea.style.height = (textarea.scrollHeight) + 'px'; /* Set the height to the calculated value */
+            textarea.style.height = 'auto'; /* auto resize */
+            textarea.style.height = (textarea.scrollHeight) + 'px'; /* auto resize */
         }
     </script>
 
     <section class="middle">
         <div class="new-post">
-            <textarea name="newpost" id="" cols="80" oninput="autoResize()"></textarea>
-            <div>
-                <button>POST</button>
-            </div>
+            <form method="post" action="{% url 'create_post' %}">
+                {% csrf_token %}
+                <textarea name="newpost" id="new-post" oninput="autoResize()"></textarea>
+                <div>
+                    <button type="submit">New post</button>
+                </div>
+            </form>
+        </div>
+    </section>
+    <section class="middle">
+        <div>
+            <ul>
+                {% for item in posts %}
+                <li>
+                    <h2>{{ item.author }}</h2>
+                    <div>
+                        <p>{{ item.content }}</p>
+                        <div>{{ item.created_at }}</div>
+                        <div>{{ item.updated_at}}</div>
+                    </div>
+                </li>
+                {% endfor %}
+                
+            </ul>
         </div>
     </section>
 {% endblock %}
