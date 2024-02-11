@@ -69,8 +69,23 @@ def create_post(request):
     if request.method == 'POST':
         content = request.POST.get('newpost', '') 
         if content:
-            post = PostContent(content=content, author=request.user)
+            post = PostContent(
+                content=content, 
+                author=request.user
+                )
             post.save()
             return HttpResponseRedirect(reverse('index'))
 
     return render(request, 'network/index.html', {'message': 'Failed to create post.'})
+
+def profile(request, author):
+    user_profile = User.objects.get(username=author)
+    posts = PostContent.objects.filter(author=user_profile).order_by('-created_at')
+    return render(request, "network/profile.html",{
+        "user": request.user,
+        "author": author,
+        "followers": user_profile.followers.count(),
+        "following": user_profile.following.count(),
+        "posts": posts
+    })
+

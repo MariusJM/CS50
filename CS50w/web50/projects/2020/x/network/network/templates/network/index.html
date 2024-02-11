@@ -1,7 +1,6 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    TODO
     <style>
         .new-post {
             max-width: 800px;
@@ -49,7 +48,7 @@
             <ul>
                 {% for item in posts %}
                 <li>
-                    <h4>{{ item.author }} posted:</h4>
+                    <h4> <a href="{% url "profile" item.author %}"> {{ item.author }} posted:</h4>
                     <div>
                         <p>{{ item.content }}</p>
                         <div>

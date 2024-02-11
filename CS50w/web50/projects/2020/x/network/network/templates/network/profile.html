@@ -1,0 +1,41 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+<div style="display: flex; ">
+    <div class="left" style="background-color: gray;">
+        <div>
+            Profile {{ author }}
+        </div>
+        <div>
+            Number of followers {{ followers }}
+        </div>
+        <div>
+            number of people following {{ following }}
+        </div>
+        <div>
+            {% if user.username == author %}
+                <!-- <p>Inside the condition</p> -->
+                <button> Follow </button>
+                <button> Unfollow </button>
+            {% endif %}
+            <!-- <p>Outside the condition</p> -->
+        </div>
+    </div>
+    <div class="middle" style="background-color: lightgray;">
+        <ul>
+            {% for item in posts %}
+            <li>
+                <h4> <a href="{% url "profile" item.author %}"> {{ item.author }} posted:</h4>
+                    <div>
+                        <p>{{ item.content }}</p>
+                        <div>
+                            <div>date created {{ item.created_at }}</div>
+                            <div>Likes {{ item.likes}}</div>
+                        </div>
+                    </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
