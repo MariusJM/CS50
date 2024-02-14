@@ -1,161 +1,69 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    <style>
-        body{
-            background-color: #202124;
-        }
-        .new-post {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 3rem 0;
-        }
 
-        .new-post textarea {
-            width: 100%;
-            box-sizing: border-box;
-            resize: vertical;
-            height: 2em;
-            overflow-y: hidden;
-        }
-
-        .new-post button {
-            text-align: left;
-        }
-
-        .post-label{
-    height: 40px; 
-    background-color: darkslategray; 
-    border-top-right-radius: 25px; 
-    margin: 0; 
-    padding-left: 15px; 
-    padding-top: 5px; 
-    border-bottom: 1px solid rgb(35, 57, 57);
-}
-.post-author{
-    color: white; 
-    text-decoration: none;
-}
-.post-content{
-    border: 1px solid darkgray; 
-    padding: 15px; 
-    margin: 0; 
-    font-size: 24px;
-}
-.post-content-container{
-    background-color: rgb(163, 163, 163); 
-    margin: 0px;
-}
-.post-bottom-container{
-    display: flex; 
-    justify-content: space-between; 
-    padding-left: 15px; 
-    padding-top: 5px; 
-    padding-bottom: 5px; 
-    background-color: #323338;
-}
-.post-like-button{
-    background-color: #202124; 
-    color: aliceblue; 
-    padding-top: 5px; 
-    padding-bottom: 5px; 
-    padding-left: 10px; 
-    padding-right: 10px; 
-    border-radius: 20px;
-}
-.post-date{
-    color: rgb(68, 68, 68); 
-    margin-right: 10px; 
-    padding: 0;
-}
-ul{
-    padding: 0;
-}
-li{
-    list-style: none;
-}
-.new-post-button{
-    width: 100%; 
-    text-align: center; 
-    justify-content: center; 
-    background-color: #202124; 
-    color: aliceblue; 
-    padding-top: 5px; 
-    padding-bottom: 5px; 
-    padding-left: 10px; 
-    padding-right: 10px; 
-    border: 1px solid darkgray; 
-    border-radius: 20px;
-}
-.new-post-content{
-    background-color: darkgray;
-}
-.new-post-label{
-    height: 40px; 
-    background-color: darkslategray; 
-    border-top-right-radius: 25px; 
-    margin: 0; 
-    padding-left: 15px; 
-    padding-top: 5px; 
-    border-bottom: 1px solid rgb(35, 57, 57); 
-    color: white;
-    text-align: center;
-}
-    </style>
-
+    <div id="posts-all-container">
+        <h2>All Posts</h2>
+            <div style="display: flex; flex-direction: column; align-items: center;">Container for posts
+                <div>
+                    {% for post in posts %}
+                        <div>
+                            <p>{{ post.body }}</p>
+                            <p>Author: {{ post.author }}</p>
+                            <p>Created at: {{ post.date_created }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+    </div>
+    
+    <div id="posts-following-container">
+        Following Posts
+    </div>
+    
+    <div id="posts-user-container">
+        <div>User Data</div>
+        <div>User Posts</div>
+    </div>
+    
     <script>
-        function autoResize() {
-            var textarea = document.querySelector('.new-post textarea');
-            textarea.style.height = 'auto'; /* auto resize */
-            textarea.style.height = (textarea.scrollHeight) + 'px'; /* auto resize */
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('#posts-all').addEventListener('click', (event) =>{
+                event.preventDefault();
+                load_posts('all');
+            });
+            document.querySelector('#posts-following').addEventListener('click', () => load_posts('following'));
+            document.querySelector('#posts-user').addEventListener('click', () => load_posts('user'));
+
+            load_posts("all")
+        });
+    
+        function load_posts(posts){
+            if (posts === "all"){
+                document.querySelector('#posts-all-container').style.display = 'block';
+                document.querySelector('#posts-following-container').style.display = 'none';
+                document.querySelector('#posts-user-container').style.display = 'none';
+                console.log(`${posts} button was clicked`);
+            } else if (posts === "following"){
+                document.querySelector('#posts-all-container').style.display = 'none';
+                document.querySelector('#posts-following-container').style.display = 'block';
+                document.querySelector('#posts-user-container').style.display = 'none';
+                console.log(`${posts} button was clicked`);
+            } else if (posts === "user") {
+                document.querySelector('#posts-all-container').style.display = 'none';
+                document.querySelector('#posts-following-container').style.display = 'none';
+                document.querySelector('#posts-user-container').style.display = 'block';
+                console.log(`${posts} button was clicked`);
+            }
+        }
+
+        function get_posts(){
+            // fetch(`/emails/${mailbox}`)
+            // .then(response => response.json())
+            // .then(emails => {
+                // Print emails
+                // console.log(emails);
+                // ... do something else with emails ...
         }
     </script>
-
-    <section>
-        <div class="new-post">
-                {% if user.is_authenticated %}
-                <section>
-                    <div class="new-post">
-                        <form method="post" action="{% url 'create_post' %}">
-                            {% csrf_token %}
-                            <h4 class="new-post-label"> 
-                                    New Post:
-                                </h4>
-                            <textarea name="newpost" id="new-post" oninput="autoResize()" class="new-post-content" placeholder="Write your post content here."></textarea>
-                            <div >
-                                <button type="submit" class="new-post-button">Add New Post</button>
-                            </div>
-                        </form>
-                    </div>
-                </section>
-                {% endif %}
-            <ul>
-                {% for item in posts %}
-                <li>
-                    <hr>
-                    <h4 class="post-label"> 
-                        <a href="{% url 'profile' item.author %}" class="post-author"> 
-                            {{ item.author }} posted:
-                        </a>
-                        </h4>
-                    <div class="post-content-container">
-                        <p class="post-content">{{ item.content }}</p>
-                        <div class="post-bottom-container">
-                            <div class="post-like-button">Likes  
-                                <strong>{{ post_likes.item.id }}
-                                    {% if post_likes.item.id %}
-                                        {{ post_likes.item.id }}
-                                    {% else %}
-                                        0
-                                    {% endif %}
-                                </strong>
-                            </div>
-                            <div class="post-date">Date posted {{ item.created_at }}</div>
-                        </div>
-                    </div>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
-    </section>
 {% endblock %}
