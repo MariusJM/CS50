@@ -3,6 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.http import JsonResponse
 
 from .models import User, Posts
 
@@ -12,6 +13,14 @@ def index(request):
     return render(request, "network/index.html",{
         "posts": posts
     })
+
+def posts(request, post_filter):
+    if post_filter == "all":
+        posts = Posts.objects.all().order_by("-date_created");
+    else:
+        return JsonResponse({"error": "post_filter in get_posts doesn't exist."}, status=400)
+    
+    return JsonResponse([post.serialize() for post in posts], safe=False)
 
 
 def login_view(request):

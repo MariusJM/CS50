@@ -14,3 +14,13 @@ class Posts(models.Model):
 
     def __str__(self):
             return f"{self.author} - {self.date_created}"
+    
+    def serialize(self):
+        return {
+            'id': self.id,
+            'author': self.author.username,
+            'body': self.body,
+            'date_created': self.date_created.strftime('%Y-%m-%d %H:%M:%S'),
+            'date_edited': self.date_edited.strftime('%Y-%m-%d %H:%M:%S'),
+            'likes': self.likes.count(),
+        }

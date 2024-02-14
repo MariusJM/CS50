@@ -33,13 +33,14 @@
                 load_posts('all');
             });
             document.querySelector('#posts-following').addEventListener('click', () => load_posts('following'));
-            document.querySelector('#posts-user').addEventListener('click', () => load_posts('user'));
+            document.querySelector('#posts-user').addEventListener('click', () => load_user_posts("all"));
 
             load_posts("all")
         });
     
         function load_posts(posts){
             if (posts === "all"){
+                
                 document.querySelector('#posts-all-container').style.display = 'block';
                 document.querySelector('#posts-following-container').style.display = 'none';
                 document.querySelector('#posts-user-container').style.display = 'none';
@@ -50,20 +51,33 @@
                 document.querySelector('#posts-user-container').style.display = 'none';
                 console.log(`${posts} button was clicked`);
             } else if (posts === "user") {
-                document.querySelector('#posts-all-container').style.display = 'none';
-                document.querySelector('#posts-following-container').style.display = 'none';
-                document.querySelector('#posts-user-container').style.display = 'block';
                 console.log(`${posts} button was clicked`);
-            }
+                load_user_posts("all")
+                }
         }
-
-        function get_posts(){
-            // fetch(`/emails/${mailbox}`)
-            // .then(response => response.json())
-            // .then(emails => {
-                // Print emails
-                // console.log(emails);
-                // ... do something else with emails ...
-        }
+        //TODO load function parameter dynamically (maybe from innerHTML)
+        //TODO clear empty blocks, remove previously loaded posts
+        function load_user_posts(author){
+            fetch(`/posts/${author}`)
+            .then(response => response.json())
+            .then(posts => {
+                // Print posts
+                console.log(posts);
+                // ... do something else with posts ...
+                posts.forEach(post => {
+                    const element= document.createElement("div");
+                    element.innerHTML = 
+                    `
+                    <h3 >Post author</h3> <h3 class="posts-user">${post.author}</h3>
+                    <p>Content ${post.body}</p>
+                    <p>Date created: ${post.date_created}</p>
+                    <p>Likes: ${post.likes}</p>
+                    `
+                document.querySelector('#posts-user-container').appendChild(element);
+                })
+            document.querySelector('#posts-all-container').style.display = 'none';
+            document.querySelector('#posts-following-container').style.display = 'none';
+            document.querySelector('#posts-user-container').style.display = 'block';
+        })};
     </script>
 {% endblock %}
