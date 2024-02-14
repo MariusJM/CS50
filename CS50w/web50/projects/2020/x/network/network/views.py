@@ -4,7 +4,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, PostContent
+from .models import User, PostContent, Follow
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 
 
 def index(request):
@@ -81,11 +83,30 @@ def create_post(request):
 def profile(request, author):
     user_profile = User.objects.get(username=author)
     posts = PostContent.objects.filter(author=user_profile).order_by('-created_at')
+    is_following = Follow.objects.filter(follower=request.user, following=user_profile).exists()
+    post_likes = {post.id: post.likes.count() for post in posts}
     return render(request, "network/profile.html",{
         "user": request.user,
         "author": author,
         "followers": user_profile.followers.count(),
         "following": user_profile.following.count(),
-        "posts": posts
+        "posts": posts,
+        "is_following": is_following,
+        "post_likes": post_likes,
     })
 
+
+def follow(request, author):
+    author = User.objects.get(username=author)
+    
+    if request.method == "POST":
+        if not Follow.objects.filter(follower=request.user, following=author).exists():
+            Follow.objects.create(follower=request.user, following=author)
+            followed = True
+        else:
+            Follow.objects.filter(follower=request.user, following=author).delete()
+            followed = False
+
+        return JsonResponse({"followed": followed, "follower_count": author.followers.count()})
+    else:
+        return JsonResponse({"error": "Invalid request method"})

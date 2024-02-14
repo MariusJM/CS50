@@ -3,14 +3,16 @@ from django.db import models
 
 
 class User(AbstractUser):
-    pass
+    def following(self, other_user):
+        return self.following.filter(following=other_user).exists()
+    
 
 class PostContent(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="post")
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    likes = models.IntegerField(default=0)
+    likes = models.ManyToManyField(User, blank=True, related_name="likes")
 
     def __str__(self):
         return f"{self.author.username} - {self.created_at}"
