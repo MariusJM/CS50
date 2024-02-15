@@ -2,7 +2,7 @@
 
 {% block body %}
 
-<div>
+<div style="display: flex; flex-direction: row;">
     <div id="user-info-container">User info</div>
     <div id="posts-container">User Posts</div>
 </div>
@@ -16,7 +16,6 @@
             load_posts("all")
         });
 
-
         function load_posts(post_filter){
             clear_children();
             fetch(`/posts/${post_filter}`)
@@ -25,19 +24,28 @@
                 // console.log(posts);
                 posts.forEach(post => {
                     const element= document.createElement("div");
-                    element.innerHTML = 
-                    `
-                    <h3 >Post author</h3> <h3 class="posts-user">${post.author}</h3>
+                    element.innerHTML =`
+                    <h3 >Post author</h3> 
+                    <h3 class="posts-user">${post.author}</h3>
                     <p>Content ${post.body}</p>
                     <p>Date created: ${post.date_created}</p>
                     <p>Likes: ${post.likes}</p>
-                    `
-                    element.addEventListener('click', () => load_posts(post.author));
+                    `;
+                element.querySelector('.posts-user').addEventListener('click', () => load_posts(post.author));
                 document.querySelector('#posts-container').appendChild(element);
                 })
+                if (post_filter === "following" || post_filter === "all"){
+                    console.log("userDatawillNotBeDisplayed")
+                    document.querySelector("#user-info-container").style.display = "none"
+                } else {
+                    console.log("userDatawillBeDisplayed")
+                    document.querySelector("#user-info-container").style.display = "block"
+                }
+                
         })};
 
-        
+
+
         function clear_children(){
             myDiv = document.getElementById('posts-container');
             myDiv.innerHTML = '';
