@@ -14,11 +14,14 @@ def index(request):
         "posts": posts
     })
 
+
 def posts(request, post_filter):
+    user = request.user
     if post_filter == "all":
         posts = Posts.objects.all().order_by("-date_created")
     elif post_filter == "following":
-        posts = Posts.objects.all().order_by("-date_created")
+        following_users = user.followers.all()
+        posts = Posts.objects.filter(author__in=following_users).order_by("-date_created")
     elif post_filter != "":
         posts = Posts.objects.filter(author__username=post_filter).order_by("-date_created")
     else:
