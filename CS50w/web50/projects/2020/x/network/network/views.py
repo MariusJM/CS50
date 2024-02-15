@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.http import JsonResponse
-
+import json
 from .models import User, Posts
 
 
@@ -25,6 +25,18 @@ def like_post(request, post_id):
         post.likes.add(user)
 
     return JsonResponse({"likes": post.likes.count()}, status=200)
+
+
+def create_post(request):
+    user = request.user
+    try:
+        data = json.loads(request.body)
+        content = data.get('content', '')
+        new_post = Posts.objects.create(author=user, body=content)
+
+        return JsonResponse({'success': 'Post created successfully', 'post_id': new_post.id})
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON data'}, status=400)
 
 
 def posts(request, post_filter):

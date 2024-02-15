@@ -3,17 +3,18 @@
 {% block body %}
 
 <div style="display: flex; flex-direction: row;">
+    {% if user.is_authenticated %}
     <div id="user-info-container">
         User info
         <button id="follow-button">Follow</button>
     </div>
     <div>
-        {% if user.is_authenticated %}
+        
         <div id="new-post">
             <textarea name="New post text area" id="content" cols="30" rows="4"></textarea>
             <button id="post-button">Post</button>
         </div>
-        {% endif %}
+    {% endif %}
         <div id="posts-container">Posts</div>
     </div>
     
@@ -22,19 +23,27 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            document.querySelector('#posts-all').addEventListener('click', () => load_posts('all'));
+            const username = "{{ user.username }}";
+            document.querySelector('#posts-all').addEventListener('click', () => load_posts('all', username));
+            {% if user.is_authenticated %}
             document.querySelector('#posts-following').addEventListener('click', () => load_posts('following'));
             document.querySelector('#posts-user').addEventListener('click', () => load_posts(document.querySelector('#posts-user').innerText.trim()));
             document.querySelector('#post-button').addEventListener('click', () => create_new_post());
             document.querySelector('#follow-button').addEventListener('click', () => follow());
+            {% endif %}
             event.preventDefault();
-            load_posts("all")
+            load_posts("all", username)
         });
 
 
-        function load_posts(post_filter){
+        function load_posts(post_filter, username){
             clear_children();
-            fetch(`/posts/${post_filter}`)
+            let fetchUrl = `/posts/${post_filter}`;
+            if (!username && post_filter !== "all") {
+                console.log("User not authenticated. Displaying all posts.");
+                fetchUrl = '/posts/all';
+            }
+            fetch(fetchUrl)
             .then(response => response.json())
             .then(posts => {
                 // console.log(posts);
@@ -45,11 +54,16 @@
                     <h3 class="posts-user">${post.author}</h3>
                     <p>Content ${post.body}</p>
                     <p>Date created: ${post.date_created}</p>
-                    <button id="like-button-${post.id}">Likes: ${post.likes}</button>
+                    ${username ? `<button id="like-button-${post.id}">Likes: ${post.likes}</button>` : ''}
                     ${post.author === username ? `<button id="edit-button-${post.id}">Edit</button>` : ''}
                     `;
                 element.querySelector('.posts-user').addEventListener('click', () => load_posts(post.author));
-                element.querySelector(`#like-button-${post.id}`).addEventListener('click', () => like_post(post.id));
+                if (username) {
+                    const likeButton = element.querySelector(`#like-button-${post.id}`);
+                    if (likeButton) {
+                        likeButton.addEventListener('click', () => like_post(post.id));
+                    }
+                }
                 
                 const editButton = element.querySelector(`#edit-button-${post.id}`);
                 if (editButton) {
@@ -81,11 +95,40 @@
 
         function create_new_post(){
             console.log("Creating new post")
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            const content = document.querySelector('#content').value
+
+            if (content.trim() === "") {
+                console.error("Post content cannot be empty");
+                return;
+            }
+            fetch('/create_post', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,
+                },
+                body: JSON.stringify({
+                    content: content,
+                }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("New post created:", data);
+                load_posts('all', '{{ user.username }}');
+            })
+            .catch(error => console.error('Error:', error));
         }
 
 
         function edit_post(post_id){
             console.log(`Going into edit mode for post ${post_id}`)
+
         }
 
 
