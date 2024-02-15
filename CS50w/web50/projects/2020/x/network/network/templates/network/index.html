@@ -3,7 +3,10 @@
 {% block body %}
 
 <div style="display: flex; flex-direction: row;">
-    <div id="user-info-container">User info</div>
+    <div id="user-info-container">
+        User info
+        <button id="follow-button">Follow</button>
+    </div>
     <div>
         {% if user.is_authenticated %}
         <div id="new-post">
@@ -22,7 +25,9 @@
             document.querySelector('#posts-all').addEventListener('click', () => load_posts('all'));
             document.querySelector('#posts-following').addEventListener('click', () => load_posts('following'));
             document.querySelector('#posts-user').addEventListener('click', () => load_posts(document.querySelector('#posts-user').innerText.trim()));
-            document.querySelector('#post-button').addEventListener('click', () => load_posts('all'));
+            document.querySelector('#post-button').addEventListener('click', () => create_new_post());
+            document.querySelector('#follow-button').addEventListener('click', () => follow());
+            event.preventDefault();
             load_posts("all")
         });
 
@@ -41,9 +46,16 @@
                     <p>Content ${post.body}</p>
                     <p>Date created: ${post.date_created}</p>
                     <button id="like-button-${post.id}">Likes: ${post.likes}</button>
+                    ${post.author === username ? `<button id="edit-button-${post.id}">Edit</button>` : ''}
                     `;
                 element.querySelector('.posts-user').addEventListener('click', () => load_posts(post.author));
                 element.querySelector(`#like-button-${post.id}`).addEventListener('click', () => like_post(post.id));
+                
+                const editButton = element.querySelector(`#edit-button-${post.id}`);
+                if (editButton) {
+                    editButton.addEventListener("click", () => edit_post(post.id));
+                }
+                
                 document.querySelector('#posts-container').appendChild(element);
                 })
                 if (post_filter === "all"){
@@ -60,6 +72,22 @@
                     document.querySelector("#user-info-container").style.display = "block"
                 }
         })};
+
+
+        function follow(){
+            console.log("Trying to follow this user")
+        }
+
+
+        function create_new_post(){
+            console.log("Creating new post")
+        }
+
+
+        function edit_post(post_id){
+            console.log(`Going into edit mode for post ${post_id}`)
+        }
+
 
         function like_post(post_id) {
             const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
