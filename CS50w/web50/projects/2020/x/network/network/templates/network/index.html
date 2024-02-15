@@ -33,14 +33,13 @@
                 load_posts('all');
             });
             document.querySelector('#posts-following').addEventListener('click', () => load_posts('following'));
-            document.querySelector('#posts-user').addEventListener('click', () => load_user_posts("all"));
+            document.querySelector('#posts-user').addEventListener('click', () => load_posts('user'));
 
             load_posts("all")
         });
     
         function load_posts(posts){
             if (posts === "all"){
-                
                 document.querySelector('#posts-all-container').style.display = 'block';
                 document.querySelector('#posts-following-container').style.display = 'none';
                 document.querySelector('#posts-user-container').style.display = 'none';
@@ -51,19 +50,19 @@
                 document.querySelector('#posts-user-container').style.display = 'none';
                 console.log(`${posts} button was clicked`);
             } else if (posts === "user") {
-                console.log(`${posts} button was clicked`);
-                load_user_posts("all")
+                // console.log(`${posts} button was clicked`);
+                const username = document.querySelector('#posts-user').innerText.trim();
+                // console.log(`${username} button was clicked`);
+                load_user_posts(`${username}`)
                 }
         }
-        //TODO load function parameter dynamically (maybe from innerHTML)
-        //TODO clear empty blocks, remove previously loaded posts
+
         function load_user_posts(author){
+            clear_children();
             fetch(`/posts/${author}`)
             .then(response => response.json())
             .then(posts => {
-                // Print posts
-                console.log(posts);
-                // ... do something else with posts ...
+                // console.log(posts);
                 posts.forEach(post => {
                     const element= document.createElement("div");
                     element.innerHTML = 
@@ -73,11 +72,17 @@
                     <p>Date created: ${post.date_created}</p>
                     <p>Likes: ${post.likes}</p>
                     `
+                    element.addEventListener('click', () => load_user_posts(post.author));
                 document.querySelector('#posts-user-container').appendChild(element);
                 })
             document.querySelector('#posts-all-container').style.display = 'none';
             document.querySelector('#posts-following-container').style.display = 'none';
             document.querySelector('#posts-user-container').style.display = 'block';
         })};
+
+        function clear_children(){
+            myDiv = document.getElementById('posts-user-container');
+            myDiv.innerHTML = '';
+        }
     </script>
 {% endblock %}

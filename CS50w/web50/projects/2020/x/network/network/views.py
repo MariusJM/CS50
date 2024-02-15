@@ -16,10 +16,14 @@ def index(request):
 
 def posts(request, post_filter):
     if post_filter == "all":
-        posts = Posts.objects.all().order_by("-date_created");
+        posts = Posts.objects.all().order_by("-date_created")
+    elif post_filter == "following":
+        posts = Posts.objects.all().order_by("-date_created")
+    elif post_filter != "":
+        posts = Posts.objects.filter(author__username=post_filter).order_by("-date_created")
     else:
         return JsonResponse({"error": "post_filter in get_posts doesn't exist."}, status=400)
-    
+
     return JsonResponse([post.serialize() for post in posts], safe=False)
 
 
