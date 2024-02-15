@@ -15,6 +15,18 @@ def index(request):
     })
 
 
+def like_post(request, post_id):
+    user = request.user
+    post = Posts.objects.get(pk=post_id)
+
+    if user in post.likes.all():
+        post.likes.remove(user)
+    else:
+        post.likes.add(user)
+
+    return JsonResponse({"likes": post.likes.count()}, status=200)
+
+
 def posts(request, post_filter):
     user = request.user
     if post_filter == "all":

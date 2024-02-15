@@ -4,7 +4,16 @@
 
 <div style="display: flex; flex-direction: row;">
     <div id="user-info-container">User info</div>
-    <div id="posts-container">User Posts</div>
+    <div>
+        {% if user.is_authenticated %}
+        <div id="new-post">
+            <textarea name="New post text area" id="content" cols="30" rows="4"></textarea>
+            <button id="post-button">Post</button>
+        </div>
+        {% endif %}
+        <div id="posts-container">Posts</div>
+    </div>
+    
 </div>
 {% csrf_token %}
     
@@ -13,8 +22,10 @@
             document.querySelector('#posts-all').addEventListener('click', () => load_posts('all'));
             document.querySelector('#posts-following').addEventListener('click', () => load_posts('following'));
             document.querySelector('#posts-user').addEventListener('click', () => load_posts(document.querySelector('#posts-user').innerText.trim()));
+            document.querySelector('#post-button').addEventListener('click', () => load_posts('all'));
             load_posts("all")
         });
+
 
         function load_posts(post_filter){
             clear_children();
@@ -29,21 +40,48 @@
                     <h3 class="posts-user">${post.author}</h3>
                     <p>Content ${post.body}</p>
                     <p>Date created: ${post.date_created}</p>
-                    <p>Likes: ${post.likes}</p>
+                    <button id="like-button-${post.id}">Likes: ${post.likes}</button>
                     `;
                 element.querySelector('.posts-user').addEventListener('click', () => load_posts(post.author));
+                element.querySelector(`#like-button-${post.id}`).addEventListener('click', () => like_post(post.id));
                 document.querySelector('#posts-container').appendChild(element);
                 })
-                if (post_filter === "following" || post_filter === "all"){
+                if (post_filter === "all"){
                     console.log("userDatawillNotBeDisplayed")
+                    document.querySelector("#new-post").style.display = "block"
+                    document.querySelector("#user-info-container").style.display = "none"
+                }else if (post_filter === "following") {
+                    console.log("userDatawillNotBeDisplayed")
+                    document.querySelector("#new-post").style.display = "none"
                     document.querySelector("#user-info-container").style.display = "none"
                 } else {
                     console.log("userDatawillBeDisplayed")
+                    document.querySelector("#new-post").style.display = "none"
                     document.querySelector("#user-info-container").style.display = "block"
                 }
-                
         })};
 
+        function like_post(post_id) {
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            fetch(`/like/${post_id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,
+                },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(`Post ${post_id} liked. New like count: ${data.likes}`);
+                document.querySelector(`#like-button-${post_id}`).textContent = `Likes: ${data.likes}`;
+            })
+            .catch(error => console.error('Error:', error));
+        }
 
 
         function clear_children(){
