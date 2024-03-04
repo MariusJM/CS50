@@ -4,12 +4,26 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+from .models import User, Tweet
 
 
 def index(request):
-    return render(request, "network/index.html")
+    tweets = Tweet.objects.all().order_by("id").reverse()
+    return render(request, "network/index.html",{
+        "all_tweets": tweets
+    })
 
+def new_tweet(request):
+    if request.method == "POST":
+        body = request.POST["content"]
+        user = User.objects.get(pk=request.user.id)
+        tweet = Tweet(
+            body = body,
+            author = user
+            )
+        tweet.save()
+        print("aaaaaaaa")
+    return HttpResponseRedirect(reverse(index))
 
 def login_view(request):
     if request.method == "POST":

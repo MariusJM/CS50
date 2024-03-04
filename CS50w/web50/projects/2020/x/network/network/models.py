@@ -6,7 +6,7 @@ class User(AbstractUser):
     followers = models.ManyToManyField("self", symmetrical=False, related_name="following")
 
 
-class tweet(models.Model):
+class Tweet(models.Model):
     author = models.ForeignKey("User", on_delete=models.CASCADE, related_name="author")
     body = models.TextField(blank=True)
     date_created = models.DateTimeField(auto_now_add=True)

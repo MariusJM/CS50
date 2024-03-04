@@ -1,18 +1,46 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    <div>
-        <h4>New Post</h4>
-        <textarea name="" id="" cols="30" rows="10"></textarea>
-        <button>Post</button>
-    </div>
-    <div>
-        <ul>
-            <h3>All Tweets</h3>
-            <li>Tweet_Nr1</li>
-            <li>Tweet_Nr2</li>
-            <li>Tweet_Nr3</li>
-            <li>Tweet_Nr4</li>
-        </ul>
+<style>
+    .main_body{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: solid 1px black;
+        padding: 5px;
+
+    }
+    .new_post_container{
+        border: 1px solid black;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 5px;
+
+    }
+
+</style>
+    <div class="main_body">
+        <h1>All Tweets</h1>
+        {% if user.is_authenticated %}
+        <p>Only authenticated users will see this</p>
+
+        <div class="new_post_container">
+            <h4>New Post</h4>
+            <form action="{% url 'new_tweet' %}" method="post">
+                {% csrf_token %}
+                <textarea name="content" rows="3" cols="80"></textarea>
+                <br>
+                <input type="submit" value="post">
+            </form>
+        </div>
+
+        {% endif %}
+        <div>
+            {% for tweet in all_tweets %}
+            <h3>{{ tweet.body }}</h3>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}
