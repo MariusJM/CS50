@@ -3,14 +3,20 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-
+from django.core.paginator import Paginator
 from .models import User, Tweet
 
 
 def index(request):
     tweets = Tweet.objects.all().order_by("id").reverse()
+
+    paginator = Paginator(tweets, 2)
+    page_index = request.GET.get("page")
+    page_posts = paginator.get_page(page_index)
+
     return render(request, "network/index.html",{
-        "all_tweets": tweets
+        "all_tweets": tweets,
+        "page_posts": page_posts
     })
 
 def new_tweet(request):

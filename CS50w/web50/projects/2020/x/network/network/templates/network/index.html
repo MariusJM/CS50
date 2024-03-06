@@ -11,7 +11,7 @@
         padding: 5px;
 
     }
-    .new_post_container{
+    .post_container{
         border: 1px solid black;
         display: flex;
         flex-direction: column;
@@ -24,9 +24,9 @@
     <div class="main_body">
         <h1>All Tweets</h1>
         {% if user.is_authenticated %}
-        <p>Only authenticated users will see this</p>
+        {% comment %} <p>Only authenticated users will see this</p> {% endcomment %}
 
-        <div class="new_post_container">
+        <div class="post_container">
             <h4>New Post</h4>
             <form action="{% url 'new_tweet' %}" method="post">
                 {% csrf_token %}
@@ -37,10 +37,24 @@
         </div>
 
         {% endif %}
-        <div>
-            {% for tweet in all_tweets %}
-            <h3>{{ tweet.body }}</h3>
-            {% endfor %}
-        </div>
+        
+        {% for tweet in page_posts %}
+            <div class="post_container">
+                <h4>{{ tweet.author }}</h4>
+                <p>{{ tweet.body }}</p>
+                <p>{{ tweet.date_created }}</p>
+            </div>    
+        {% endfor %}
+        
     </div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination d-flex justify-content-center">
+            {% if page_posts.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_posts.previous_page_number }}">Previous</a></li>
+            {% endif %}
+            {% if page_posts.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_posts.next_page_number }}">Next</a></li>
+            {% endif %}
+        </ul>
+      </nav>
 {% endblock %}
