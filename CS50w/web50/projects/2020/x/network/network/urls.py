@@ -8,11 +8,5 @@ urlpatterns = [
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
-<<<<<<< HEAD
-    path("posts/<str:post_filter>", views.posts, name="posts"),
-    path("like/<int:post_id>", views.like_post, name="like_post"),
-    path('create_post', views.create_post, name='create_post'),
-=======
     path("new_tweet", views.new_tweet, name="new_tweet"),
->>>>>>> less-JS
 ]
