@@ -3,6 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+<<<<<<< HEAD
 from django.http import JsonResponse
 import json
 from .models import User, Posts
@@ -52,7 +53,35 @@ def posts(request, post_filter):
         return JsonResponse({"error": "post_filter in get_posts doesn't exist."}, status=400)
 
     return JsonResponse([post.serialize() for post in posts], safe=False)
+=======
+from django.core.paginator import Paginator
+from .models import User, Tweet
 
+
+def index(request):
+    tweets = Tweet.objects.all().order_by("id").reverse()
+>>>>>>> less-JS
+
+    paginator = Paginator(tweets, 2)
+    page_index = request.GET.get("page")
+    page_posts = paginator.get_page(page_index)
+
+    return render(request, "network/index.html",{
+        "all_tweets": tweets,
+        "page_posts": page_posts
+    })
+
+def new_tweet(request):
+    if request.method == "POST":
+        body = request.POST["content"]
+        user = User.objects.get(pk=request.user.id)
+        tweet = Tweet(
+            body = body,
+            author = user
+            )
+        tweet.save()
+        print("aaaaaaaa")
+    return HttpResponseRedirect(reverse(index))
 
 def login_view(request):
     if request.method == "POST":
