@@ -9,13 +9,11 @@ from .models import User, Tweet
 
 def index(request):
     tweets = Tweet.objects.all().order_by("id").reverse()
-
-    paginator = Paginator(tweets, 2)
+    paginator = Paginator(tweets, 3)
     page_index = request.GET.get("page")
     page_posts = paginator.get_page(page_index)
 
     return render(request, "network/index.html",{
-        "all_tweets": tweets,
         "page_posts": page_posts
     })
 
@@ -30,6 +28,19 @@ def new_tweet(request):
         tweet.save()
         print("aaaaaaaa")
     return HttpResponseRedirect(reverse(index))
+
+def user_profile(request, user_id):
+    user = User.objects.get(pk=user_id)
+    tweets = Tweet.objects.filter(author=user).order_by("id").reverse()
+    paginator = Paginator(tweets, 2)
+    page_index = request.GET.get("page")
+    page_posts = paginator.get_page(page_index)
+
+    return render(request, "network/profile.html",{
+        "page_posts": page_posts,
+        "username": user.username
+    })
+
 
 def login_view(request):
     if request.method == "POST":

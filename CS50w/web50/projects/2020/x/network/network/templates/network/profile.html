@@ -22,22 +22,8 @@
 
 </style>
     <div class="main_body">
-        <h1>All Tweets</h1>
-        {% if user.is_authenticated %}
-        {% comment %} <p>Only authenticated users will see this</p> {% endcomment %}
-
-        <div class="post_container">
-            <h4>New Post</h4>
-            <form action="{% url 'new_tweet' %}" method="post">
-                {% csrf_token %}
-                <textarea name="content" rows="3" cols="80"></textarea>
-                <br>
-                <input type="submit" value="post">
-            </form>
-        </div>
-
-        {% endif %}
-        
+        <h1>{{ username }}</h1>
+       
         {% for tweet in page_posts %}
             <div class="post_container">
                 <h4>{{ tweet.author }}</h4>
